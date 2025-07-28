@@ -99,6 +99,7 @@ export const categories = pgTable('public.categories', {
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
   color: varchar('color', { length: 7 }).default('#3B82F6'),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parentId: uuid('parent_id').references((): any => categories.id, {
     onDelete: 'cascade',
   }),

@@ -79,7 +79,7 @@ export type PaginationQuery = z.infer<typeof paginationSchema>;
 /**
  * 검증 오류를 처리하는 유틸리티 함수
  */
-export function formatValidationErrors(error: z.ZodError<any>): string {
+export function formatValidationErrors(error: z.ZodError): string {
   return error.issues
     .map((err: z.ZodIssue) => `${err.path.join('.')}: ${err.message}`)
     .join(', ');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { createClient } from '@/lib/supabase/client';
 
@@ -11,7 +11,7 @@ interface Profile {
   full_name: string | null;
   avatar_url: string | null;
   bio: string | null;
-  preferences: any;
+  preferences: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -28,46 +28,8 @@ export default function UserProfile() {
   });
   const supabase = createClient();
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
-
-  const fetchProfile = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (error && error.code !== 'PGRST116') {
-        console.error('프로필 조회 오류:', error);
-        return;
-      }
-
-      if (data) {
-        setProfile(data);
-        setFormData({
-          username: data.username || '',
-          full_name: data.full_name || '',
-          bio: data.bio || '',
-        });
-      } else {
-        // 프로필이 없으면 생성
-        await createProfile();
-      }
-    } catch (error) {
-      console.error('프로필 조회 중 오류:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const createProfile = async () => {
+  // createProfile을 먼저 정의 (fetchProfile에서 사용하므로)
+  const createProfile = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -99,7 +61,46 @@ export default function UserProfile() {
     } catch (error) {
       console.error('프로필 생성 중 오류:', error);
     }
-  };
+  }, [user, supabase]);
+
+  const fetchProfile = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('프로필 조회 오류:', error);
+        return;
+      }
+
+      if (data) {
+        setProfile(data);
+        setFormData({
+          username: data.username || '',
+          full_name: data.full_name || '',
+          bio: data.bio || '',
+        });
+      } else {
+        // 프로필이 없으면 생성
+        await createProfile();
+      }
+    } catch (error) {
+      console.error('프로필 조회 중 오류:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [user, supabase, createProfile]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+    }
+  }, [user, fetchProfile]);
 
   const handleSave = async () => {
     if (!user || !profile) return;
