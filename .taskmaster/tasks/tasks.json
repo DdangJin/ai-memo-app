@@ -139,7 +139,7 @@
         "description": "Develop a comprehensive authentication system using Supabase Auth, enabling login, signup, session management, and secure access control via Row Level Security (RLS) policies leveraging the auth.users table.",
         "details": "1. Integrate Supabase Auth into the Next.js project by installing and configuring the necessary packages (e.g., @supabase/supabase-js, @supabase/auth-helpers-nextjs).\n2. Implement user registration (signup) and login flows using Supabase Auth methods, supporting email/password and optionally social login providers as required by the application.\n3. Set up session management to persist user authentication state across page reloads and navigation, utilizing Supabase's session and user management APIs (prefer getUser() over getSession() for secure user validation).\n4. Protect authenticated routes in Next.js using middleware or higher-order components, ensuring only logged-in users can access protected pages.\n5. Leverage the auth.users table for user identification and linkages to application data (e.g., profiles, memos).\n6. Configure Row Level Security (RLS) policies in Supabase to restrict access to sensitive tables (such as public.profiles and public.memos) so that users can only access or modify their own data, referencing the authenticated user's ID from auth.users.\n7. Document all configuration steps, including environment variable setup, Supabase dashboard settings, and code examples for authentication flows and RLS policy definitions.",
         "testStrategy": "- Verify that users can successfully register, log in, and log out, and that session state persists as expected across navigation and reloads.\n- Attempt to access protected routes as both authenticated and unauthenticated users to confirm proper access control.\n- Test that users can only access or modify their own data in protected tables, confirming RLS policies are enforced by attempting unauthorized operations via Supabase SQL editor or API requests.\n- Review Supabase Auth logs and user records to ensure correct linkage between auth.users and application data.\n- Perform code review and manual walkthrough of authentication and authorization flows, including error handling and edge cases.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           1,
           2
@@ -151,8 +151,8 @@
             "title": "Integrate Supabase Auth into Next.js Project",
             "description": "Install and configure Supabase Auth in the Next.js application, including all required packages and environment variables.",
             "dependencies": [],
-            "details": "Install @supabase/supabase-js and any necessary helper packages (e.g., @supabase/ssr or @supabase/auth-helpers-nextjs). Set up .env.local with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. Create utility functions for Supabase client initialization for both client and server components.",
-            "status": "pending",
+            "details": "Install @supabase/supabase-js and any necessary helper packages (e.g., @supabase/ssr or @supabase/auth-helpers-nextjs). Set up .env.local with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. Create utility functions for Supabase client initialization for both client and server components.\n<info added on 2025-07-28T11:43:49.957Z>\n패키지 설치 진행: npm install @supabase/supabase-js @supabase/ssr 명령어로 필요한 Supabase 패키지들을 설치했습니다. 환경 변수 설정: .env.local 파일에 NEXT_PUBLIC_SUPABASE_URL과 NEXT_PUBLIC_SUPABASE_ANON_KEY를 추가하여 Supabase 프로젝트 연결을 구성했습니다. 유틸리티 함수 생성: lib/supabase 디렉토리에 클라이언트 컴포넌트용 createClient 함수와 서버 컴포넌트용 createServerClient 함수를 구현하여 각각의 환경에서 적절한 Supabase 클라이언트 인스턴스를 생성할 수 있도록 설정했습니다.\n</info added on 2025-07-28T11:43:49.957Z>",
+            "status": "done",
             "testStrategy": "Verify that the application can connect to the Supabase project and that the auth.users table is accessible."
           },
           {
@@ -162,8 +162,8 @@
             "dependencies": [
               "3.1"
             ],
-            "details": "Create UI forms and backend logic for user registration and authentication. Use Supabase Auth methods for signUp and signIn, and handle confirmation emails if required. Optionally, integrate OAuth providers as needed.",
-            "status": "pending",
+            "details": "Create UI forms and backend logic for user registration and authentication. Use Supabase Auth methods for signUp and signIn, and handle confirmation emails if required. Optionally, integrate OAuth providers as needed.\n<info added on 2025-07-28T11:44:56.515Z>\n구현 계획: 먼저 사용자 등록 및 로그인을 위한 UI 컴포넌트들(회원가입 폼, 로그인 폼)을 생성하고, Supabase Auth의 signUp 및 signIn 메서드를 활용한 인증 로직을 구현합니다. 이후 인증 상태를 전역적으로 관리하기 위한 AuthContext를 생성하여 애플리케이션 전반에서 사용자 인증 상태를 효율적으로 관리할 수 있도록 설정합니다.\n</info added on 2025-07-28T11:44:56.515Z>",
+            "status": "done",
             "testStrategy": "Test user registration and login with valid and invalid credentials, including email confirmation and social login if enabled."
           },
           {
@@ -173,8 +173,8 @@
             "dependencies": [
               "3.2"
             ],
-            "details": "Use Supabase's getUser() (preferred) or getSession() to validate and persist user sessions. Ensure session state is maintained in both client and server components, and handle logout functionality.",
-            "status": "pending",
+            "details": "Use Supabase's getUser() (preferred) or getSession() to validate and persist user sessions. Ensure session state is maintained in both client and server components, and handle logout functionality.\n<info added on 2025-07-28T11:46:17.063Z>\nAuthContext에서 Supabase의 getUser() 메서드와 onAuthStateChange 리스너를 통한 세션 관리가 이미 구현되어 있습니다. 다음 단계로 대시보드 페이지를 생성하여 보호된 라우트를 구현할 예정입니다. 대시보드는 인증된 사용자만 접근 가능하도록 설정되며, 인증되지 않은 사용자는 로그인 페이지로 리디렉션됩니다.\n</info added on 2025-07-28T11:46:17.063Z>",
+            "status": "done",
             "testStrategy": "Verify that authenticated users remain logged in across page reloads and navigation, and that logout clears session state."
           },
           {
@@ -184,8 +184,8 @@
             "dependencies": [
               "3.3"
             ],
-            "details": "Implement middleware or higher-order components to guard protected routes. Ensure user-specific data (e.g., profiles, memos) is associated with the correct user ID from auth.users.",
-            "status": "pending",
+            "details": "Implement middleware or higher-order components to guard protected routes. Ensure user-specific data (e.g., profiles, memos) is associated with the correct user ID from auth.users.\n<info added on 2025-07-28T11:46:51.198Z>\nRoute protection middleware has been implemented and dashboard authentication verification is in place. Created user profile management components to handle user data connected to the auth.users table. Set up data management system to associate user-specific information (profiles, memos) with the correct authenticated user ID, ensuring proper data isolation and user ownership.\n</info added on 2025-07-28T11:46:51.198Z>",
+            "status": "done",
             "testStrategy": "Attempt to access protected routes as both authenticated and unauthenticated users to confirm proper access control. Verify that user data is correctly linked to the authenticated user."
           },
           {
@@ -195,8 +195,8 @@
             "dependencies": [
               "3.4"
             ],
-            "details": "Write RLS policies for tables such as public.profiles and public.memos, referencing the authenticated user's ID from auth.users. Test and document all policy definitions.",
-            "status": "pending",
+            "details": "Write RLS policies for tables such as public.profiles and public.memos, referencing the authenticated user's ID from auth.users. Test and document all policy definitions.\n<info added on 2025-07-28T11:48:01.042Z>\nSupabase MCP를 활용하여 다음 테이블들에 대한 RLS 정책을 구성합니다:\n\n1. **profiles 테이블**: 사용자가 자신의 프로필 정보만 조회, 수정할 수 있도록 정책 설정\n2. **memos 테이블**: 사용자가 자신이 작성한 메모만 CRUD 작업 가능하도록 정책 설정  \n3. **categories 테이블**: 사용자별 카테고리 데이터 격리를 위한 정책 설정\n4. **tags 테이블**: 사용자가 생성한 태그만 접근 가능하도록 정책 설정\n5. **memo_tags 테이블**: 사용자 소유 메모와 태그 간의 연결 관계만 접근 가능하도록 정책 설정\n\n각 테이블에 대해 auth.uid()를 사용하여 현재 인증된 사용자의 ID와 테이블의 user_id 컬럼을 비교하는 정책을 작성하고, SELECT, INSERT, UPDATE, DELETE 작업에 대한 개별 정책을 정의합니다.\n</info added on 2025-07-28T11:48:01.042Z>",
+            "status": "done",
             "testStrategy": "Test that users can only access or modify their own records in protected tables and are denied access to others' data."
           }
         ]
@@ -1311,7 +1311,7 @@
     ],
     "metadata": {
       "created": "2025-07-28T04:59:55.287Z",
-      "updated": "2025-07-28T11:34:35.911Z",
+      "updated": "2025-07-28T11:54:05.088Z",
       "description": "Tasks for master context"
     }
   }
