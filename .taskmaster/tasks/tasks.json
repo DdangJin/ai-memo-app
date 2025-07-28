@@ -1,0 +1,866 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "프로젝트 초기화 및 개발 환경 설정",
+        "description": "Next.js 14 (프론트엔드 & 백엔드), TypeScript, Tailwind CSS 설정, ESLint, Prettier 구성, 기본 프로젝트 구조 생성",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "details": "Phase 1 MVP의 기반이 되는 개발 환경을 구축합니다. Next.js 14를 프론트엔드와 백엔드 모두에 사용할 수 있도록 설정하고, TypeScript, Tailwind CSS를 구성합니다. 코드 품질 유지를 위해 ESLint와 Prettier를 함께 설정합니다. 기본 프로젝트 구조를 생성하고, Next.js의 app 디렉토리 구조를 활용합니다.",
+        "testStrategy": "개발 서버 실행 확인, TypeScript 컴파일 에러 없음 확인, Tailwind CSS 스타일 적용 확인, Next.js 백엔드(예: API 라우트) 정상 동작 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Install Node.js and Initialize Next.js 14 Project",
+            "description": "Set up the required Node.js version and initialize a new Next.js 14 project using the official starter.",
+            "dependencies": [],
+            "details": "Verify that Node.js version 18.17 or higher is installed. Use npx or npm to create a new Next.js 14 project, ensuring the app directory structure is used.",
+            "status": "pending",
+            "testStrategy": "Run 'node -v' to confirm version. Execute 'npm run dev' and verify the development server starts and the default Next.js page loads."
+          },
+          {
+            "id": 2,
+            "title": "Configure TypeScript in Next.js Project",
+            "description": "Enable and configure TypeScript support for type safety and development efficiency.",
+            "dependencies": ["1.1"],
+            "details": "Add TypeScript and necessary type definitions. Allow Next.js to auto-generate tsconfig.json, then adjust configuration as needed for the project.",
+            "status": "pending",
+            "testStrategy": "Ensure TypeScript files compile without errors and the app runs with .tsx/.ts files."
+          },
+          {
+            "id": 3,
+            "title": "Integrate and Configure Tailwind CSS",
+            "description": "Set up Tailwind CSS for utility-first styling within the Next.js project.",
+            "dependencies": ["1.2"],
+            "details": "Install Tailwind CSS and its peer dependencies. Initialize Tailwind config files and update global CSS to include Tailwind directives.",
+            "status": "pending",
+            "testStrategy": "Add a sample component using Tailwind classes and verify styles are applied in the browser."
+          },
+          {
+            "id": 4,
+            "title": "Set Up ESLint and Prettier for Code Quality",
+            "description": "Configure ESLint and Prettier to enforce code style and quality standards.",
+            "dependencies": ["1.3"],
+            "details": "Install ESLint and Prettier along with recommended plugins for Next.js and TypeScript. Create configuration files and ensure compatibility between ESLint and Prettier.",
+            "status": "pending",
+            "testStrategy": "Run lint and format scripts to confirm code is automatically checked and formatted according to the rules."
+          },
+          {
+            "id": 5,
+            "title": "Establish Base Project Structure Using Next.js App Directory",
+            "description": "Organize the initial project folder structure, leveraging Next.js 14's app directory features.",
+            "dependencies": ["1.4"],
+            "details": "Create essential folders (e.g., app, public, components, styles, api). Set up a sample page and API route to validate both frontend and backend integration.",
+            "status": "pending",
+            "testStrategy": "Verify that both a sample page and an API route are accessible and function as expected in the development environment."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "데이터베이스 설계 및 Prisma 설정",
+        "description": "Supabase 데이터베이스 스키마 설계, Drizzle ORM 설정, User와 Memo 모델 정의",
+        "status": "pending",
+        "dependencies": [1],
+        "priority": "high",
+        "details": "User와 Memo 모델을 포함한 데이터베이스 스키마를 Supabase에서 설계하고 Drizzle ORM을 설정합니다. 관계형 데이터베이스 구조를 정의하고 마이그레이션을 준비합니다. Supabase의 Visual Schema Designer 또는 declarative schema 방식을 활용하여 테이블 및 관계를 설계하고, Drizzle ORM을 통해 애플리케이션과 데이터베이스를 연동합니다.",
+        "testStrategy": "Supabase 스키마 검증, 마이그레이션 실행 확인, Drizzle ORM을 통한 데이터베이스 연결 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design relational database schema for User and Memo models",
+            "description": "Define the tables, columns, data types, and relationships for User and Memo models, ensuring proper relational integrity and normalization.",
+            "dependencies": [],
+            "details": "Identify required fields for User (e.g., id, email, created_at) and Memo (e.g., id, user_id, content, created_at), and establish foreign key relationships between them. Document the schema structure for implementation.",
+            "status": "pending",
+            "testStrategy": "Review schema design for completeness and relational integrity; validate with sample entity-relationship diagrams."
+          },
+          {
+            "id": 2,
+            "title": "Implement schema in Supabase using Visual Schema Designer or declarative SQL",
+            "description": "Create the User and Memo tables and define their relationships in Supabase, using either the Visual Schema Designer or declarative SQL files.",
+            "dependencies": ["2.1"],
+            "details": "Use Supabase's schema tools to create tables and set up foreign keys. Ensure the schema matches the design specifications and supports required relationships.",
+            "status": "pending",
+            "testStrategy": "Verify table creation and relationships in Supabase dashboard; check for correct foreign key constraints."
+          },
+          {
+            "id": 3,
+            "title": "Prepare and execute database migrations",
+            "description": "Generate migration files for the defined schema and apply them to the Supabase database to ensure version-controlled schema changes.",
+            "dependencies": ["2.2"],
+            "details": "Create migration scripts for initial schema setup and any subsequent changes. Apply migrations in the correct order to maintain schema integrity.",
+            "status": "pending",
+            "testStrategy": "Run migrations and confirm successful execution; rollback and reapply to test migration reliability."
+          },
+          {
+            "id": 4,
+            "title": "Set up Drizzle ORM and configure database connection",
+            "description": "Install and configure Drizzle ORM in the application, connecting it to the Supabase database and ensuring compatibility with the defined schema.",
+            "dependencies": ["2.3"],
+            "details": "Install Drizzle ORM packages, configure connection settings, and ensure the ORM is aware of the User and Memo models. Generate or sync types as needed.",
+            "status": "pending",
+            "testStrategy": "Test ORM connection to the database; verify that models are correctly mapped and accessible."
+          },
+          {
+            "id": 5,
+            "title": "Validate integration and perform end-to-end tests",
+            "description": "Test the full integration by performing CRUD operations on User and Memo models through Drizzle ORM, ensuring data consistency and correct relationships.",
+            "dependencies": ["2.4"],
+            "details": "Write and execute tests for creating, reading, updating, and deleting User and Memo records. Check that foreign key constraints and data integrity are enforced.",
+            "status": "pending",
+            "testStrategy": "Run automated and manual tests for all CRUD operations; review database state after each operation for correctness."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "기본 인증 시스템 구현",
+        "description": "Supabase Auth 기반 사용자 인증 시스템 구현, 로그인/회원가입 기능, 세션 관리",
+        "status": "pending",
+        "dependencies": [2],
+        "priority": "high",
+        "details": "Supabase Auth를 사용하여 사용자 인증 시스템을 구현합니다. 회원가입, 로그인, 로그아웃 기능과 세션 관리를 포함합니다. Supabase의 인증 API 및 클라이언트 SDK를 활용하여 이메일/비밀번호 기반 인증을 구현하고, 필요에 따라 소셜 로그인 등 추가 인증 방식을 확장할 수 있습니다. 인증된 사용자의 세션 관리는 Supabase Auth의 내장 세션 관리 기능을 사용합니다.",
+        "testStrategy": "회원가입/로그인 기능 테스트, Supabase Auth 토큰 및 세션 검증, 보안 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Configure Supabase Auth Settings",
+            "description": "Set up Supabase Auth project settings, including authentication providers, password policies, and email verification requirements.",
+            "dependencies": [],
+            "details": "Access the Supabase dashboard, navigate to the Authentication tab, and configure email/password authentication as the default method. Adjust password requirements and enable email verification. Optionally, enable and configure social login providers such as Google or Apple as needed.",
+            "status": "pending",
+            "testStrategy": "Verify that authentication providers are correctly enabled and that password and email verification policies are enforced during sign-up."
+          },
+          {
+            "id": 2,
+            "title": "Implement User Sign-Up Functionality",
+            "description": "Develop the user registration flow using Supabase Auth's email/password API, including email verification handling.",
+            "dependencies": ["3.1"],
+            "details": "Use the Supabase client SDK to implement sign-up logic in the application. Ensure that users receive a verification email and that the application can handle the verification callback to activate accounts.",
+            "status": "pending",
+            "testStrategy": "Test user registration with valid and invalid data, confirm receipt of verification emails, and verify that only confirmed users can log in."
+          },
+          {
+            "id": 3,
+            "title": "Implement User Login and Logout",
+            "description": "Develop login and logout functionality using Supabase Auth, supporting email/password and optionally social login.",
+            "dependencies": ["3.1", "3.2"],
+            "details": "Integrate Supabase Auth's sign-in and sign-out methods in the application. For social login, use the appropriate provider configuration and handle OAuth redirects as needed.",
+            "status": "pending",
+            "testStrategy": "Test login and logout flows for both email/password and enabled social providers. Ensure sessions are properly created and destroyed."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Session Management",
+            "description": "Implement session management using Supabase Auth's built-in session handling, including session persistence and retrieval.",
+            "dependencies": ["3.3"],
+            "details": "Use Supabase Auth's session API to manage user sessions, retrieve the current session, and handle session expiration or renewal. Ensure session state is accessible throughout the application.",
+            "status": "pending",
+            "testStrategy": "Test session persistence across page reloads, session expiration, and session retrieval in both client and server contexts."
+          },
+          {
+            "id": 5,
+            "title": "Secure and Test the Authentication System",
+            "description": "Conduct security and integration testing for all authentication flows, including token validation and error handling.",
+            "dependencies": ["3.4"],
+            "details": "Perform comprehensive tests for sign-up, login, logout, and session management. Validate Supabase Auth tokens, handle edge cases (e.g., invalid credentials, expired sessions), and ensure secure storage of sensitive data.",
+            "status": "pending",
+            "testStrategy": "Run automated and manual tests for all authentication scenarios, verify token integrity, and check for common security vulnerabilities."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "기본 UI 컴포넌트 및 레이아웃 구성",
+        "description": "헤더, 네비게이션, 레이아웃 컴포넌트 생성, 반응형 디자인 적용",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [1],
+        "details": "재사용 가능한 UI 컴포넌트들을 생성하고 기본 레이아웃을 구성합니다. 반응형 디자인을 적용하여 모바일, 태블릿, 데스크톱을 모두 지원합니다.",
+        "testStrategy": "컴포넌트 렌더링 테스트, 반응형 디자인 확인, 접근성 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Header Component",
+            "description": "Develop a reusable header component that includes branding, navigation triggers, and adapts to different screen sizes.",
+            "dependencies": [],
+            "details": "Implement the header as a standalone UI component in the /app/ui directory, ensuring it supports both desktop and mobile layouts using Tailwind CSS.",
+            "status": "pending",
+            "testStrategy": "Render the header in isolation, verify responsiveness on various devices, and check accessibility (e.g., keyboard navigation, ARIA labels)."
+          },
+          {
+            "id": 2,
+            "title": "Develop Navigation Component",
+            "description": "Build a navigation component that provides access to main sections of the application and supports both horizontal and vertical layouts.",
+            "dependencies": [],
+            "details": "Design the navigation to be reusable and place it in the /app/ui directory. Implement mobile-friendly features such as a collapsible menu or drawer.",
+            "status": "pending",
+            "testStrategy": "Test navigation rendering, menu toggling on mobile, and ensure all links are accessible via keyboard."
+          },
+          {
+            "id": 3,
+            "title": "Implement Main Layout Component",
+            "description": "Create a main layout component that composes the header, navigation, and content area, supporting flexible placement and structure.",
+            "dependencies": ["4.1", "4.2"],
+            "details": "Assemble the header and navigation components within a layout wrapper. Ensure the layout adapts to different device sizes using Tailwind CSS grid or flex utilities.",
+            "status": "pending",
+            "testStrategy": "Render the layout with sample content, verify correct placement of header and navigation, and test responsiveness."
+          },
+          {
+            "id": 4,
+            "title": "Apply Responsive Design Principles",
+            "description": "Integrate responsive design techniques to ensure all UI components and layouts function seamlessly across mobile, tablet, and desktop devices.",
+            "dependencies": ["4.3"],
+            "details": "Utilize Tailwind CSS responsive utilities and media queries to adjust spacing, font sizes, and component visibility based on screen size.",
+            "status": "pending",
+            "testStrategy": "Manually test UI on various device emulators and browsers, and use automated tools to check for layout breakpoints."
+          },
+          {
+            "id": 5,
+            "title": "Ensure Component Reusability and Accessibility",
+            "description": "Refactor UI components for maximum reusability and implement accessibility best practices throughout the layout.",
+            "dependencies": ["4.3", "4.4"],
+            "details": "Abstract common UI patterns into reusable components, document their usage, and add ARIA attributes and keyboard navigation support.",
+            "status": "pending",
+            "testStrategy": "Review component usage across pages, run accessibility audits (e.g., Lighthouse, axe), and verify compliance with WCAG guidelines."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "메모 CRUD 기능 구현",
+        "description": "메모 생성, 읽기, 수정, 삭제 기능 구현, API 엔드포인트 생성",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [2, 3, 4],
+        "details": "메모의 기본 CRUD 기능을 구현합니다. RESTful API 엔드포인트를 생성하고 프론트엔드에서 메모를 관리할 수 있는 기능을 제공합니다.",
+        "testStrategy": "CRUD 기능 테스트, API 엔드포인트 테스트, 에러 처리 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Memo Data Model and API Specification",
+            "description": "Define the Memo data structure and specify RESTful API endpoints for create, read, update, and delete operations, including request/response formats and error handling conventions.",
+            "dependencies": [],
+            "details": "Establish the fields for the Memo entity, determine endpoint URLs and HTTP methods (e.g., POST /memos, GET /memos/:id), and document expected status codes and error responses.",
+            "status": "pending",
+            "testStrategy": "Review API specification for completeness and consistency; validate against RESTful conventions."
+          },
+          {
+            "id": 2,
+            "title": "Implement Memo CRUD API Endpoints",
+            "description": "Develop backend logic and controllers for memo creation, retrieval, updating, and deletion, ensuring proper integration with the database and adherence to the API specification.",
+            "dependencies": ["5.1"],
+            "details": "Use the chosen backend framework to implement endpoints, connect to the Memo model in the database, and handle input validation and error scenarios.",
+            "status": "pending",
+            "testStrategy": "Unit test each endpoint for correct behavior, including edge cases and error handling."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Authentication and Authorization",
+            "description": "Ensure that all memo CRUD endpoints are protected so only authenticated users can access and modify their own memos.",
+            "dependencies": ["5.2"],
+            "details": "Apply authentication middleware to endpoints, verify user identity, and enforce ownership checks for memo access and modification.",
+            "status": "pending",
+            "testStrategy": "Test endpoints with authenticated and unauthenticated requests; verify access control and data isolation."
+          },
+          {
+            "id": 4,
+            "title": "Develop Frontend Memo Management Features",
+            "description": "Implement frontend components for creating, viewing, editing, and deleting memos, connecting to the backend API and providing a user-friendly interface.",
+            "dependencies": ["5.3"],
+            "details": "Build UI forms and lists for memo operations, handle API requests and responses, and provide feedback for success or error states.",
+            "status": "pending",
+            "testStrategy": "Perform end-to-end tests of memo workflows in the UI; validate correct API integration and error handling."
+          },
+          {
+            "id": 5,
+            "title": "Test and Document Memo CRUD Functionality",
+            "description": "Conduct comprehensive testing of all CRUD operations and document API usage, error cases, and frontend workflows for future maintenance.",
+            "dependencies": ["5.4"],
+            "details": "Write integration and acceptance tests, prepare API documentation, and ensure all features meet requirements and handle errors gracefully.",
+            "status": "pending",
+            "testStrategy": "Run automated and manual tests; review documentation for clarity and completeness."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "메모 목록 및 상세 보기 페이지 구현",
+        "description": "메모 목록 페이지, 상세 보기 페이지, 페이지네이션 구현",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [5],
+        "details": "메모 목록을 보여주는 페이지와 개별 메모의 상세 보기 페이지를 구현합니다. 페이지네이션과 정렬 기능도 포함합니다.",
+        "testStrategy": "페이지 렌더링 테스트, 페이지네이션 기능 확인, 반응형 디자인 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Memo List and Detail Page Layouts",
+            "description": "Create the UI/UX layouts for the memo list page and the individual memo detail page, ensuring consistency and usability.",
+            "dependencies": [],
+            "details": "Define the structure and components for both pages, including headers, memo previews, and navigation elements. Ensure responsive design using Tailwind CSS.",
+            "status": "pending",
+            "testStrategy": "Review page layouts on multiple devices and screen sizes to confirm responsive design and visual consistency."
+          },
+          {
+            "id": 2,
+            "title": "Implement Memo List Page with Pagination",
+            "description": "Develop the memo list page to display memos with pagination controls.",
+            "dependencies": ["6.1"],
+            "details": "Fetch memo data from the backend, display a paginated list, and implement pagination logic using Next.js searchParams and router utilities.",
+            "status": "pending",
+            "testStrategy": "Verify correct memo data is displayed per page, pagination controls work, and URL reflects current page."
+          },
+          {
+            "id": 3,
+            "title": "Implement Sorting Functionality on Memo List",
+            "description": "Add sorting options (e.g., by date, title) to the memo list page.",
+            "dependencies": ["6.2"],
+            "details": "Provide UI controls for sorting, update the list based on selected criteria, and synchronize sorting state with URL parameters.",
+            "status": "pending",
+            "testStrategy": "Test sorting controls for correct order, ensure sorting state persists via URL, and verify UI updates accordingly."
+          },
+          {
+            "id": 4,
+            "title": "Develop Memo Detail Page",
+            "description": "Implement the page to display full details of a selected memo.",
+            "dependencies": ["6.1"],
+            "details": "Fetch and render all relevant memo details based on memo ID from the route. Ensure navigation from the list page to detail page works seamlessly.",
+            "status": "pending",
+            "testStrategy": "Check that selecting a memo navigates to the correct detail page and displays all memo information accurately."
+          },
+          {
+            "id": 5,
+            "title": "Integrate and Test End-to-End Navigation and State",
+            "description": "Ensure smooth navigation between list and detail pages, and validate pagination and sorting interactions.",
+            "dependencies": ["6.2", "6.3", "6.4"],
+            "details": "Test the full user flow: navigating between pages, changing pagination and sorting, and viewing memo details. Address any state or routing issues.",
+            "status": "pending",
+            "testStrategy": "Perform end-to-end tests covering all navigation paths, state persistence, and UI updates. Confirm no regressions or broken flows."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "기본 검색 기능 구현",
+        "description": "제목과 내용 기반 검색 기능, 실시간 검색 결과 표시",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [6],
+        "details": "메모의 제목과 내용을 기반으로 한 검색 기능을 구현합니다. 실시간 검색 결과를 표시하고 검색 성능을 최적화합니다.",
+        "testStrategy": "검색 기능 테스트, 성능 테스트, 검색 결과 정확성 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Search Input and UI Components",
+            "description": "Create user interface components for entering search queries and displaying real-time search results.",
+            "dependencies": [],
+            "details": "Implement a search bar that captures user input and a results area that updates as the user types. Ensure accessibility and responsive design.",
+            "status": "pending",
+            "testStrategy": "Verify UI renders correctly, input is captured, and results area updates in real time."
+          },
+          {
+            "id": 2,
+            "title": "Implement Search Query Handling with URL Sync",
+            "description": "Capture search input and synchronize it with the URL query parameters using Next.js 14 app router conventions.",
+            "dependencies": ["7.1"],
+            "details": "Use Next.js hooks such as useSearchParams, usePathname, and useRouter to update the URL based on user input, enabling bookmarking and sharing of search states.",
+            "status": "pending",
+            "testStrategy": "Test that the URL updates as the user types and that reloading or sharing the URL preserves the search state."
+          },
+          {
+            "id": 3,
+            "title": "Develop Backend Search Logic for Title and Content",
+            "description": "Implement efficient backend logic to search memos by title and content, supporting partial and case-insensitive matches.",
+            "dependencies": ["7.2"],
+            "details": "Create API endpoints or server actions that accept search parameters and query the database for matching memos, optimizing for performance.",
+            "status": "pending",
+            "testStrategy": "Test API with various queries for accuracy, speed, and correct handling of edge cases."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Real-Time Search Result Updates",
+            "description": "Connect frontend search input to backend search logic to display results in real time as the user types.",
+            "dependencies": ["7.3"],
+            "details": "Implement debouncing to minimize unnecessary requests and ensure smooth user experience. Update the UI with new results as soon as they are available.",
+            "status": "pending",
+            "testStrategy": "Verify that results update responsively with minimal delay and that unnecessary backend calls are avoided."
+          },
+          {
+            "id": 5,
+            "title": "Optimize and Test Search Performance and Accuracy",
+            "description": "Profile and optimize search performance, and validate the accuracy and relevance of search results.",
+            "dependencies": ["7.4"],
+            "details": "Analyze query execution times, optimize database indexes or queries as needed, and conduct comprehensive testing for result correctness and system responsiveness.",
+            "status": "pending",
+            "testStrategy": "Run performance benchmarks, test with large datasets, and validate that search results are accurate and relevant for a variety of queries."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "OpenAI API 연동 및 설정",
+        "description": "Anthropic Claude API 키 설정, 기본 연동 구조 구현, 환경 변수 관리",
+        "status": "pending",
+        "dependencies": [5],
+        "priority": "medium",
+        "details": "Anthropic Claude API를 연동하고 환경 변수를 통해 API 키를 안전하게 관리합니다. 기본적인 Claude API 호출 구조를 구현합니다. API 키는 환경 변수(예: ANTHROPIC_API_KEY)로 관리하며, API 요청 시 적절한 헤더와 엔드포인트를 사용합니다.",
+        "testStrategy": "Claude API 연동 테스트, 환경 변수 설정 확인, 에러 처리 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Obtain and Secure Anthropic Claude API Key",
+            "description": "Register for an Anthropic account, generate an API key via the dashboard, and ensure the key is securely stored for later use.",
+            "dependencies": [],
+            "details": "Access the Anthropic dashboard, create a new API key, and copy it to a secure location. Do not share or expose the key publicly.",
+            "status": "pending",
+            "testStrategy": "Verify that the API key is generated and stored securely, and confirm that it is not exposed in version control or logs."
+          },
+          {
+            "id": 2,
+            "title": "Configure Environment Variables for API Key Management",
+            "description": "Set up environment variables (e.g., ANTHROPIC_API_KEY) to securely manage the API key within the application.",
+            "dependencies": ["8.1"],
+            "details": "Add the API key to a local environment file (such as .env) or a secure configuration system, ensuring it is excluded from source control.",
+            "status": "pending",
+            "testStrategy": "Check that the environment variable is correctly loaded by the application and not present in public repositories."
+          },
+          {
+            "id": 3,
+            "title": "Implement Basic API Integration Structure",
+            "description": "Develop the foundational code to connect to the Anthropic Claude API, including endpoint configuration and request structure.",
+            "dependencies": ["8.2"],
+            "details": "Set up the base URL, required headers (including the API key from environment variables), and request/response handling logic for the Claude API.",
+            "status": "pending",
+            "testStrategy": "Send a test request to the Claude API and verify a valid response is received."
+          },
+          {
+            "id": 4,
+            "title": "Handle API Authentication and Error Management",
+            "description": "Ensure all API requests include proper authentication and implement error handling for failed or invalid requests.",
+            "dependencies": ["8.3"],
+            "details": "Configure request headers for authentication, handle common API errors (e.g., invalid key, rate limits), and provide meaningful error messages.",
+            "status": "pending",
+            "testStrategy": "Test with valid and invalid API keys, simulate error scenarios, and confirm appropriate error handling and messaging."
+          },
+          {
+            "id": 5,
+            "title": "Validate Integration and Document Setup Process",
+            "description": "Test the complete integration flow and document the setup and configuration steps for future reference.",
+            "dependencies": ["8.4"],
+            "details": "Perform end-to-end testing of the API integration, confirm environment variable usage, and create clear documentation for setup and troubleshooting.",
+            "status": "pending",
+            "testStrategy": "Run integration tests, review documentation for completeness, and ensure all steps are reproducible by another developer."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "AI 텍스트 요약 기능 구현",
+        "description": "긴 메모 내용을 간결하게 요약하는 AI 기능 구현",
+        "status": "pending",
+        "dependencies": [8],
+        "priority": "medium",
+        "details": "Anthropic Claude API를 사용하여 긴 메모 내용을 간결하게 요약하는 기능을 구현합니다. Claude API의 최신 모델을 활용하여 요약 품질을 최적화하고 사용자 경험을 개선합니다. API 키는 환경 변수(예: ANTHROPIC_API_KEY)로 안전하게 관리하며, 적절한 엔드포인트와 인증 방식을 적용합니다.",
+        "testStrategy": "Claude API 기반 요약 기능 테스트, 요약 품질 평가, 성능 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Analyze Summarization Requirements and Define Prompt Strategy",
+            "description": "Identify the summarization needs for memo content and design effective prompts for the Claude API to ensure concise, high-quality summaries.",
+            "dependencies": [],
+            "details": "Research best practices for prompt engineering with Claude, determine summary length, style, and structure requirements, and document prompt templates for consistent results.",
+            "status": "pending",
+            "testStrategy": "Review prompt outputs with sample memos to verify summary quality and alignment with requirements."
+          },
+          {
+            "id": 2,
+            "title": "Integrate Claude API and Implement Secure Authentication",
+            "description": "Set up the Anthropic Claude API client in the application and configure secure API key management using environment variables.",
+            "dependencies": ["9.1"],
+            "details": "Install necessary SDKs or libraries, configure the API endpoint, and ensure the ANTHROPIC_API_KEY is securely loaded from environment variables. Implement error handling for authentication failures.",
+            "status": "pending",
+            "testStrategy": "Verify API connectivity and authentication by making test requests and confirming successful responses."
+          },
+          {
+            "id": 3,
+            "title": "Develop Memo Summarization Backend Logic",
+            "description": "Implement backend logic to receive memo content, invoke the Claude API with the designed prompt, and process the summary response.",
+            "dependencies": ["9.2"],
+            "details": "Create API routes or backend functions that accept memo text, apply the prompt strategy, call the Claude API, and return the summary. Handle edge cases such as long input texts and API errors.",
+            "status": "pending",
+            "testStrategy": "Unit test backend logic with various memo lengths and content types, ensuring correct summary generation and error handling."
+          },
+          {
+            "id": 4,
+            "title": "Optimize Summarization Quality and User Experience",
+            "description": "Iteratively refine prompt design, model selection, and response handling to maximize summary quality and user satisfaction.",
+            "dependencies": ["9.3"],
+            "details": "Experiment with different Claude models and prompt variations, collect user feedback, and adjust parameters (e.g., max tokens, summary style) for optimal results.",
+            "status": "pending",
+            "testStrategy": "Conduct user acceptance testing and qualitative evaluation of summary outputs; measure improvements based on feedback."
+          },
+          {
+            "id": 5,
+            "title": "Implement Frontend Integration and Summary Display",
+            "description": "Connect the summarization backend to the frontend, enabling users to submit memos and view generated summaries within the UI.",
+            "dependencies": ["9.4"],
+            "details": "Develop frontend components for memo submission and summary display, handle loading and error states, and ensure a seamless user experience.",
+            "status": "pending",
+            "testStrategy": "Perform end-to-end tests to confirm that users can submit memos, receive summaries, and interact with the feature as intended."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "카테고리 자동 분류 기능 구현",
+        "description": "메모 내용 기반 자동 카테고리 분류, Anthropic Claude API 기반 AI 분류 알고리즘",
+        "status": "pending",
+        "dependencies": [8],
+        "priority": "medium",
+        "details": "메모 내용을 분석하여 자동으로 카테고리를 분류하는 기능을 구현합니다. Anthropic Claude API를 활용한 AI 기반 분류 알고리즘을 적용하여 분류 정확도를 높입니다. Claude API 연동 시 환경 변수(예: ANTHROPIC_API_KEY)를 통해 API 키를 안전하게 관리하며, 적절한 엔드포인트와 인증 방식을 적용합니다. Claude API의 최신 모델을 사용하여 메모 내용을 입력값으로 전달하고, 분류 결과를 받아 카테고리로 자동 지정합니다.",
+        "testStrategy": "Anthropic Claude API 기반 분류 정확도 테스트, 다양한 카테고리별 분류 테스트, API 연동 및 성능 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Category Taxonomy and Classification Criteria",
+            "description": "Establish a clear set of categories and the rules or criteria for classifying memos based on their content.",
+            "dependencies": [],
+            "details": "Analyze typical memo content and determine the most relevant categories. Document the classification logic and provide representative examples for each category to guide AI prompt engineering.",
+            "status": "pending",
+            "testStrategy": "Review category definitions with stakeholders and validate with sample memos to ensure coverage and clarity."
+          },
+          {
+            "id": 2,
+            "title": "Design and Implement Claude API Integration Layer",
+            "description": "Develop a secure and modular integration with the Anthropic Claude API, ensuring API keys are managed via environment variables.",
+            "dependencies": ["10.1"],
+            "details": "Set up the Claude API client using the official SDK (e.g., Python or JavaScript), configure authentication using the ANTHROPIC_API_KEY environment variable, and implement error handling for API requests.",
+            "status": "pending",
+            "testStrategy": "Verify API connectivity, authentication, and error handling by sending test requests and checking responses."
+          },
+          {
+            "id": 3,
+            "title": "Engineer and Optimize Prompt for Memo Classification",
+            "description": "Create and iteratively refine the prompt sent to Claude to maximize classification accuracy for memo content.",
+            "dependencies": ["10.2"],
+            "details": "Design prompts that clearly instruct Claude to classify memo content into the predefined categories. Test and adjust prompt wording, system instructions, and model parameters (e.g., temperature, model version) for optimal results.",
+            "status": "pending",
+            "testStrategy": "Evaluate prompt effectiveness using a set of validation memos and measure classification accuracy."
+          },
+          {
+            "id": 4,
+            "title": "Implement Automatic Category Assignment Logic",
+            "description": "Develop backend logic to process memo content, invoke the Claude API, and assign the returned category to each memo.",
+            "dependencies": ["10.3"],
+            "details": "Integrate the classification workflow into the memo creation or update process. Ensure that the category returned by Claude is mapped and stored correctly in the database.",
+            "status": "pending",
+            "testStrategy": "Test end-to-end memo creation and update flows, confirming that categories are assigned and persisted as expected."
+          },
+          {
+            "id": 5,
+            "title": "Validate Classification Accuracy and System Performance",
+            "description": "Systematically test the classification feature for accuracy, robustness, and performance across diverse memo samples.",
+            "dependencies": ["10.4"],
+            "details": "Prepare a diverse test set of memos, run them through the classification pipeline, and compare results against expected categories. Measure response times and handle edge cases or misclassifications.",
+            "status": "pending",
+            "testStrategy": "Document accuracy metrics, review misclassified cases, and conduct performance/load testing to ensure reliability."
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "AI 처리 상태 관리 구현",
+        "description": "AI 요약 및 분류 처리 중 로딩 상태 표시, 에러 처리",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [9, 10],
+        "details": "AI 기능 사용 시 로딩 상태를 표시하고 에러를 적절히 처리하는 기능을 구현합니다. 사용자 경험을 개선합니다.",
+        "testStrategy": "로딩 상태 테스트, 에러 처리 테스트, 사용자 경험 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define AI Processing State Model",
+            "description": "Design and document the state model for AI processing, including loading, success, and error states for both summarization and classification features.",
+            "dependencies": [],
+            "details": "Specify all possible states (e.g., idle, loading, success, error) and transitions. Ensure the model supports extensibility for future AI features.",
+            "status": "pending",
+            "testStrategy": "Review state model with team; verify completeness and clarity through peer review."
+          },
+          {
+            "id": 2,
+            "title": "Implement Loading State UI Components",
+            "description": "Develop and integrate UI components that visually indicate loading states during AI summarization and classification processes.",
+            "dependencies": ["11.1"],
+            "details": "Create reusable loading indicators using Tailwind CSS and Next.js best practices. Ensure indicators are accessible and consistent across the application.",
+            "status": "pending",
+            "testStrategy": "Trigger AI actions and verify loading indicators appear and disappear at correct times; conduct accessibility checks."
+          },
+          {
+            "id": 3,
+            "title": "Implement Error Handling Logic",
+            "description": "Develop logic to detect, capture, and handle errors during AI processing, ensuring errors are surfaced to the UI and logged appropriately.",
+            "dependencies": ["11.1"],
+            "details": "Handle both client-side and server-side errors. Provide user-friendly error messages and ensure errors are logged for debugging.",
+            "status": "pending",
+            "testStrategy": "Simulate various error scenarios (network, API, unexpected) and verify correct error handling and messaging."
+          },
+          {
+            "id": 4,
+            "title": "Integrate State Management Solution",
+            "description": "Integrate a state management approach (e.g., useState, useReducer, or Context API) to coordinate AI processing states across relevant components.",
+            "dependencies": ["11.1", "11.2", "11.3"],
+            "details": "Choose a state management method suitable for the project scale and Next.js 14 architecture. Ensure state updates trigger correct UI changes.",
+            "status": "pending",
+            "testStrategy": "Test state transitions through user flows; verify UI updates correctly reflect underlying state changes."
+          },
+          {
+            "id": 5,
+            "title": "User Experience Validation and Refinement",
+            "description": "Conduct user testing to validate the loading and error handling experience, and refine UI/UX based on feedback.",
+            "dependencies": ["11.2", "11.3", "11.4"],
+            "details": "Gather feedback from stakeholders or test users. Adjust loading indicators, error messages, and transitions for optimal clarity and usability.",
+            "status": "pending",
+            "testStrategy": "Perform usability tests; collect feedback; confirm improvements address user pain points."
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Web Speech API 연동",
+        "description": "브라우저 내장 음성 인식 기능 연동, 기본 음성 입력 구조",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [5],
+        "details": "Web Speech API를 사용하여 브라우저에서 음성 인식 기능을 구현합니다. 기본적인 음성 입력 구조를 만듭니다.",
+        "testStrategy": "음성 인식 테스트, 브라우저 호환성 확인, 에러 처리 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Research Web Speech API Capabilities and Browser Support",
+            "description": "Investigate the features of the Web Speech API, focusing on the SpeechRecognition interface for speech-to-text, and document browser compatibility and limitations.",
+            "dependencies": [],
+            "details": "Review MDN and other authoritative sources to understand the API's structure, available events, and browser support matrix. Identify any known issues or polyfills required for cross-browser functionality.",
+            "status": "pending",
+            "testStrategy": "Verify API availability and feature support across target browsers using sample code and compatibility tables."
+          },
+          {
+            "id": 2,
+            "title": "Design Basic Speech Input Architecture",
+            "description": "Define the core structure for integrating speech input into the application, including event flow and data handling.",
+            "dependencies": ["12.1"],
+            "details": "Outline the main components: initializing SpeechRecognition, handling start/stop, processing results, and managing errors. Specify how recognized text will be captured and passed to the application.",
+            "status": "pending",
+            "testStrategy": "Review architecture with stakeholders and validate against project requirements."
+          },
+          {
+            "id": 3,
+            "title": "Implement SpeechRecognition Initialization and Event Handlers",
+            "description": "Develop the JavaScript logic to instantiate SpeechRecognition, configure settings, and set up event listeners for result, error, and status events.",
+            "dependencies": ["12.2"],
+            "details": "Write code to create a SpeechRecognition instance, set interimResults and language options, and implement handlers for onresult, onerror, onstart, and onend events.",
+            "status": "pending",
+            "testStrategy": "Test event firing and data flow using sample utterances and simulate error conditions."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Speech Input with UI Components",
+            "description": "Connect the speech recognition logic to UI elements, enabling users to start and stop recognition and view recognized text.",
+            "dependencies": ["12.3"],
+            "details": "Bind start/stop actions to buttons or other controls, and display interim and final recognition results in the interface. Ensure accessibility and clear user feedback.",
+            "status": "pending",
+            "testStrategy": "Perform manual UI tests to confirm correct interaction and feedback during speech input."
+          },
+          {
+            "id": 5,
+            "title": "Test and Validate Speech Input Functionality",
+            "description": "Conduct comprehensive testing of the speech input feature, including browser compatibility, error handling, and edge cases.",
+            "dependencies": ["12.4"],
+            "details": "Execute test cases for various browsers, languages, and input scenarios. Validate error handling, fallback behavior, and integration with the rest of the application.",
+            "status": "pending",
+            "testStrategy": "Document test results, address issues, and confirm readiness for integration with dependent features."
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "음성 녹음 인터페이스 구현",
+        "description": "음성 녹음 버튼, 상태 표시, 실시간 음성-텍스트 변환",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [12],
+        "details": "사용자가 쉽게 음성을 녹음할 수 있는 인터페이스를 구현합니다. 실시간으로 음성을 텍스트로 변환하는 기능을 제공합니다.",
+        "testStrategy": "음성 녹음 테스트, 실시간 변환 테스트, 사용자 경험 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement Voice Recording Button",
+            "description": "Create a user interface component for starting and stopping voice recording, ensuring accessibility and clear user feedback.",
+            "dependencies": [],
+            "details": "Develop a visually distinct button that toggles recording state. Integrate with browser microphone APIs to initiate and stop audio capture. Ensure the button reflects the current recording status (e.g., active/inactive).",
+            "status": "pending",
+            "testStrategy": "Verify button toggles recording state, responds to user input, and is accessible via keyboard and screen readers."
+          },
+          {
+            "id": 2,
+            "title": "Implement Recording State and Status Display",
+            "description": "Manage and display the current recording status (e.g., idle, recording, completed) to the user in real time.",
+            "dependencies": ["13.1"],
+            "details": "Use application state to track recording status. Display clear indicators (such as text or icons) reflecting whether recording is in progress, paused, or finished.",
+            "status": "pending",
+            "testStrategy": "Test that status updates accurately reflect the underlying recording state during all user interactions."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Real-time Speech-to-Text Conversion",
+            "description": "Convert recorded audio to text in real time using the Web Speech API or equivalent, and display the transcript as the user speaks.",
+            "dependencies": ["13.2"],
+            "details": "Connect the audio stream to a speech recognition service. Continuously update the transcript display as new speech is recognized.",
+            "status": "pending",
+            "testStrategy": "Check that spoken words are transcribed and displayed with minimal delay and reasonable accuracy during recording."
+          },
+          {
+            "id": 4,
+            "title": "Handle Microphone Permissions and Error States",
+            "description": "Request microphone access from the user and gracefully handle permission denials or technical errors.",
+            "dependencies": ["13.1"],
+            "details": "Implement logic to prompt for microphone access. Display informative error messages if access is denied or if technical issues occur.",
+            "status": "pending",
+            "testStrategy": "Simulate permission denial and hardware errors to confirm appropriate error handling and user messaging."
+          },
+          {
+            "id": 5,
+            "title": "Synchronize UI Updates and Finalize Recording Workflow",
+            "description": "Ensure seamless synchronization between recording controls, status indicators, and transcript display, and finalize the recording session cleanly.",
+            "dependencies": ["13.3", "13.4"],
+            "details": "Coordinate UI components so that stopping recording finalizes the transcript and resets the interface for the next session. Prepare the transcript data for downstream features (e.g., editing or saving).",
+            "status": "pending",
+            "testStrategy": "Test end-to-end workflow: start recording, observe real-time updates, stop recording, and verify UI resets and transcript is finalized."
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "음성 메모 편집 기능 구현",
+        "description": "변환된 텍스트 편집 기능, 음성 메모 표시 및 관리",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [13],
+        "details": "음성으로 변환된 텍스트를 편집할 수 있는 기능을 구현합니다. 음성 메모를 표시하고 관리하는 기능을 제공합니다.",
+        "testStrategy": "텍스트 편집 테스트, 음성 메모 관리 테스트, 사용자 경험 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Editable Text Interface",
+            "description": "Create a user interface that allows users to view and edit transcribed text from voice memos.",
+            "dependencies": [],
+            "details": "Implement a text editor component with basic formatting and editing capabilities, ensuring seamless integration with the voice memo data model.",
+            "status": "pending",
+            "testStrategy": "Verify text can be edited, saved, and changes are reflected in the underlying data."
+          },
+          {
+            "id": 2,
+            "title": "Implement Voice Memo Display",
+            "description": "Develop a component to display a list of voice memos with associated metadata (e.g., date, duration, title).",
+            "dependencies": [],
+            "details": "Ensure each memo entry shows key information and provides access to both the audio and its transcribed text.",
+            "status": "pending",
+            "testStrategy": "Check that all memos are listed correctly and metadata is accurate."
+          },
+          {
+            "id": 3,
+            "title": "Enable Voice Memo Management Actions",
+            "description": "Add functionality for users to manage voice memos, including actions such as delete, rename, and organize.",
+            "dependencies": ["14.2"],
+            "details": "Provide UI controls for memo management and ensure actions update both the UI and persistent storage.",
+            "status": "pending",
+            "testStrategy": "Test each management action for correct behavior and data consistency."
+          },
+          {
+            "id": 4,
+            "title": "Synchronize Edited Text with Voice Memo Data",
+            "description": "Ensure that edits to transcribed text are properly saved and associated with the correct voice memo.",
+            "dependencies": ["14.1"],
+            "details": "Implement logic to persist text changes and maintain synchronization between the text editor and memo records.",
+            "status": "pending",
+            "testStrategy": "Edit text for a memo, save, and verify persistence and correct association."
+          },
+          {
+            "id": 5,
+            "title": "User Experience and Accessibility Validation",
+            "description": "Review and enhance the usability and accessibility of the voice memo editing and management features.",
+            "dependencies": ["14.1", "14.2", "14.3", "14.4"],
+            "details": "Conduct user testing, apply accessibility best practices, and refine UI/UX based on feedback.",
+            "status": "pending",
+            "testStrategy": "Perform user experience tests and accessibility audits to ensure compliance and ease of use."
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "성능 최적화 및 배포 준비",
+        "description": "코드 분할, 이미지 최적화, Vercel 배포 및 Edge Cache 활용",
+        "status": "pending",
+        "dependencies": [11, 14],
+        "priority": "medium",
+        "details": "애플리케이션의 성능을 최적화하고 프로덕션 배포를 준비합니다. 코드 분할, 이미지 최적화, Vercel 배포 설정, Vercel Edge Cache 활용 등을 구현합니다. Vercel 플랫폼에 맞는 배포 환경을 구성하고, Edge Cache를 통해 글로벌 성능을 극대화합니다.",
+        "testStrategy": "성능 테스트, Vercel 배포 테스트, Edge Cache 동작 확인, 모니터링 설정 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Code Splitting and Dynamic Imports",
+            "description": "Apply code splitting techniques and utilize dynamic imports to optimize JavaScript bundle size and improve initial load performance.",
+            "dependencies": [],
+            "details": "Leverage Next.js's automatic code splitting for pages and use dynamic() for components that are heavy or not needed immediately. Ensure only necessary code is loaded per route or interaction.",
+            "status": "pending",
+            "testStrategy": "Verify reduced initial bundle size, confirm lazy-loaded components are loaded on demand, and measure page load times before and after implementation."
+          },
+          {
+            "id": 2,
+            "title": "Optimize Images for Production",
+            "description": "Implement image optimization strategies to reduce load times and bandwidth usage across the application.",
+            "dependencies": [],
+            "details": "Use Next.js Image component for automatic resizing, format conversion, and lazy loading. Audit existing images for size and format, and replace or compress as needed.",
+            "status": "pending",
+            "testStrategy": "Check image loading performance, validate correct formats and sizes, and use Lighthouse or similar tools to confirm improvements."
+          },
+          {
+            "id": 3,
+            "title": "Configure Vercel Deployment Settings",
+            "description": "Set up and configure the Vercel deployment environment tailored for the application’s production needs.",
+            "dependencies": [],
+            "details": "Adjust Vercel project settings, environment variables, and build configurations. Ensure the deployment process is automated and repeatable.",
+            "status": "pending",
+            "testStrategy": "Deploy to Vercel, verify successful build and deployment, and confirm environment variables and settings are correctly applied."
+          },
+          {
+            "id": 4,
+            "title": "Implement and Validate Vercel Edge Cache",
+            "description": "Enable and configure Vercel Edge Cache to maximize global performance and reduce latency for end users.",
+            "dependencies": ["15.3"],
+            "details": "Set up caching rules for static assets and dynamic routes as appropriate. Monitor cache hit rates and adjust cache-control headers for optimal results.",
+            "status": "pending",
+            "testStrategy": "Test cache behavior using Vercel analytics, confirm cache hits/misses, and measure response times from multiple regions."
+          },
+          {
+            "id": 5,
+            "title": "Conduct Performance and Deployment Validation",
+            "description": "Perform comprehensive performance testing and validate all optimizations and deployment configurations.",
+            "dependencies": ["15.1", "15.2", "15.3", "15.4"],
+            "details": "Run end-to-end performance tests, monitor application metrics, and ensure all optimizations are effective in the production environment.",
+            "status": "pending",
+            "testStrategy": "Use tools like Lighthouse, WebPageTest, and Vercel analytics to assess performance. Confirm all optimizations are active and deployment is stable."
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-28T04:59:55.287Z",
+      "updated": "2025-07-28T04:59:55.287Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

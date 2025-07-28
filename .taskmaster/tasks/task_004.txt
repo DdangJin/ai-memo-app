@@ -1,0 +1,43 @@
+# Task ID: 4
+# Title: 기본 UI 컴포넌트 및 레이아웃 구성
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: 헤더, 네비게이션, 레이아웃 컴포넌트 생성, 반응형 디자인 적용
+# Details:
+재사용 가능한 UI 컴포넌트들을 생성하고 기본 레이아웃을 구성합니다. 반응형 디자인을 적용하여 모바일, 태블릿, 데스크톱을 모두 지원합니다.
+
+# Test Strategy:
+컴포넌트 렌더링 테스트, 반응형 디자인 확인, 접근성 테스트
+
+# Subtasks:
+## 1. Create Header Component [pending]
+### Dependencies: None
+### Description: Develop a reusable header component that includes branding, navigation triggers, and adapts to different screen sizes.
+### Details:
+Implement the header as a standalone UI component in the /app/ui directory, ensuring it supports both desktop and mobile layouts using Tailwind CSS.
+
+## 2. Develop Navigation Component [pending]
+### Dependencies: None
+### Description: Build a navigation component that provides access to main sections of the application and supports both horizontal and vertical layouts.
+### Details:
+Design the navigation to be reusable and place it in the /app/ui directory. Implement mobile-friendly features such as a collapsible menu or drawer.
+
+## 3. Implement Main Layout Component [pending]
+### Dependencies: 4.1, 4.2
+### Description: Create a main layout component that composes the header, navigation, and content area, supporting flexible placement and structure.
+### Details:
+Assemble the header and navigation components within a layout wrapper. Ensure the layout adapts to different device sizes using Tailwind CSS grid or flex utilities.
+
+## 4. Apply Responsive Design Principles [pending]
+### Dependencies: 4.3
+### Description: Integrate responsive design techniques to ensure all UI components and layouts function seamlessly across mobile, tablet, and desktop devices.
+### Details:
+Utilize Tailwind CSS responsive utilities and media queries to adjust spacing, font sizes, and component visibility based on screen size.
+
+## 5. Ensure Component Reusability and Accessibility [pending]
+### Dependencies: 4.3, 4.4
+### Description: Refactor UI components for maximum reusability and implement accessibility best practices throughout the layout.
+### Details:
+Abstract common UI patterns into reusable components, document their usage, and add ARIA attributes and keyboard navigation support.
+
