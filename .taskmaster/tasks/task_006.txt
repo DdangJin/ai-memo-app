@@ -1,0 +1,43 @@
+# Task ID: 6
+# Title: 메모 목록 및 상세 보기 페이지 구현
+# Status: pending
+# Dependencies: 5
+# Priority: high
+# Description: 메모 목록 페이지, 상세 보기 페이지, 페이지네이션 구현
+# Details:
+메모 목록을 보여주는 페이지와 개별 메모의 상세 보기 페이지를 구현합니다. 페이지네이션과 정렬 기능도 포함합니다.
+
+# Test Strategy:
+페이지 렌더링 테스트, 페이지네이션 기능 확인, 반응형 디자인 확인
+
+# Subtasks:
+## 1. Design Memo List and Detail Page Layouts [pending]
+### Dependencies: None
+### Description: Create the UI/UX layouts for the memo list page and the individual memo detail page, ensuring consistency and usability.
+### Details:
+Define the structure and components for both pages, including headers, memo previews, and navigation elements. Ensure responsive design using Tailwind CSS.
+
+## 2. Implement Memo List Page with Pagination [pending]
+### Dependencies: 6.1
+### Description: Develop the memo list page to display memos with pagination controls.
+### Details:
+Fetch memo data from the backend, display a paginated list, and implement pagination logic using Next.js searchParams and router utilities.
+
+## 3. Implement Sorting Functionality on Memo List [pending]
+### Dependencies: 6.2
+### Description: Add sorting options (e.g., by date, title) to the memo list page.
+### Details:
+Provide UI controls for sorting, update the list based on selected criteria, and synchronize sorting state with URL parameters.
+
+## 4. Develop Memo Detail Page [pending]
+### Dependencies: 6.1
+### Description: Implement the page to display full details of a selected memo.
+### Details:
+Fetch and render all relevant memo details based on memo ID from the route. Ensure navigation from the list page to detail page works seamlessly.
+
+## 5. Integrate and Test End-to-End Navigation and State [pending]
+### Dependencies: 6.2, 6.3, 6.4
+### Description: Ensure smooth navigation between list and detail pages, and validate pagination and sorting interactions.
+### Details:
+Test the full user flow: navigating between pages, changing pagination and sorting, and viewing memo details. Address any state or routing issues.
+
