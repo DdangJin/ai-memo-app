@@ -99,7 +99,7 @@ export const categories = pgTable('public.categories', {
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
   color: varchar('color', { length: 7 }).default('#3B82F6'),
-  parentId: uuid('parent_id').references(() => categories.id, {
+  parentId: uuid('parent_id').references((): any => categories.id, {
     onDelete: 'cascade',
   }),
   sortOrder: integer('sort_order').default(0),
