@@ -277,7 +277,7 @@
         "description": "Develop API endpoints for creating, reading, updating, and deleting memos, referencing auth.users UUID for ownership, and leveraging Drizzle ORM for database operations.",
         "details": "1. Define the memo entity in Drizzle ORM, ensuring the schema matches the public.memos table and includes a foreign key referencing the auth.users UUID for user ownership.\n2. Implement RESTful API endpoints (e.g., /api/memos) for each CRUD operation:\n   - POST /api/memos: Create a new memo, associating it with the authenticated user's UUID.\n   - GET /api/memos and GET /api/memos/:id: Retrieve all memos for the authenticated user or a specific memo by ID.\n   - PUT /api/memos/:id: Update an existing memo, enforcing that only the owner can modify their memo.\n   - DELETE /api/memos/:id: Delete a memo, ensuring only the owner can perform this action.\n3. Use Drizzle ORM methods for all database interactions, following best practices for type safety and error handling[2][3][4].\n4. Integrate authentication middleware to extract and verify the user's identity from the session (using Supabase Auth), and enforce authorization checks on all endpoints.\n5. Validate request payloads and handle errors gracefully, returning appropriate HTTP status codes and messages.\n6. Document the API endpoints and expected request/response formats for future frontend integration.",
         "testStrategy": "- Use automated tests (e.g., Jest or integration tests) to verify each endpoint:\n  - Create: Send POST requests with valid and invalid data, confirming correct creation and error handling.\n  - Read: Fetch memos as authenticated users, ensuring only their memos are returned; test unauthorized access.\n  - Update: Attempt to update memos as both the owner and non-owner, verifying proper authorization enforcement.\n  - Delete: Attempt to delete memos as both the owner and non-owner, confirming only the owner can delete.\n- Manually test endpoints using Postman or a similar tool to validate real-world behavior and error responses.\n- Check that all database changes are reflected as expected and that no unauthorized access is possible.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           2,
           3
@@ -290,7 +290,7 @@
             "description": "Create the TypeScript schema for the memo entity using Drizzle ORM, ensuring it matches the public.memos table structure and includes a foreign key referencing the auth.users UUID for ownership.",
             "dependencies": [],
             "details": "Set up the Drizzle ORM schema for memos, including all required fields (e.g., id, title, content, timestamps) and a foreign key constraint to the users table using UUID. Ensure type safety and prepare for future migrations.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that the generated schema matches the database table structure and that migrations run successfully without errors."
           },
           {
@@ -301,7 +301,7 @@
               "5.1"
             ],
             "details": "Integrate authentication middleware into the API layer to ensure each request is associated with a valid user. Implement authorization logic to restrict memo access and modifications to their respective owners.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with authenticated and unauthenticated requests, and attempt unauthorized access to memos to confirm proper enforcement."
           },
           {
@@ -313,7 +313,7 @@
               "5.2"
             ],
             "details": "Implement endpoints: POST /api/memos, GET /api/memos, GET /api/memos/:id, PUT /api/memos/:id, DELETE /api/memos/:id. Use Drizzle ORM methods for all database operations, and ensure endpoints are protected by authentication and authorization middleware.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use automated tests to verify each endpoint's functionality, including correct data creation, retrieval, update, and deletion, as well as proper error handling for unauthorized or invalid requests."
           },
           {
@@ -324,7 +324,7 @@
               "5.3"
             ],
             "details": "Use validation libraries or custom logic to check request bodies for required fields and correct data types. Ensure all errors (validation, authentication, authorization, database) are handled gracefully and consistently.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Send requests with missing, malformed, or invalid data and verify that the API responds with clear, accurate error messages and status codes."
           },
           {
@@ -336,7 +336,7 @@
               "5.4"
             ],
             "details": "Prepare API documentation (e.g., OpenAPI/Swagger or Markdown) detailing each endpoint, required fields, authentication flow, and example requests/responses for frontend integration.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Review documentation for completeness and accuracy; have a frontend developer or tester use the documentation to successfully interact with the API."
           }
         ]
@@ -1311,7 +1311,7 @@
     ],
     "metadata": {
       "created": "2025-07-28T04:59:55.287Z",
-      "updated": "2025-07-28T12:05:39.585Z",
+      "updated": "2025-07-28T12:34:35.385Z",
       "description": "Tasks for master context"
     }
   }
