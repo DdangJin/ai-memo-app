@@ -1,25 +1,89 @@
-# AI 메모 애플리케이션
+# 📝 Memora - AI 음성 메모장 웹서비스
 
-AI 기술을 활용한 스마트 메모 애플리케이션입니다. Next.js와 TypeScript를 기반으로 구축되었으며, Cursor IDE와 Taskmaster를 통한 AI 기반 개발 환경을 제공합니다.
+AI 기술을 활용한 스마트 메모 애플리케이션입니다. 음성과 텍스트로 빠르게 메모하고, AI가 자동으로 요약 및 분류해주는 웹 메모장입니다.
 
 ## 🚀 기술 스택
 
-- **Framework**: Next.js 15.4.4 (App Router)
+### **프론트엔드 & 백엔드**
+
+- **Framework**: Next.js 14 (풀스택 프레임워크)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Runtime**: React 19.1.0
+- **Styling**: TailwindCSS
+
+### **데이터베이스 & 인증**
+
+- **Database**: Supabase (PostgreSQL 기반)
+- **ORM**: Drizzle ORM
+- **Authentication**: Supabase Auth
+
+### **AI 서비스**
+
+- **AI Engine**: Anthropic Claude API
+- **Speech Recognition**: Web Speech API
+- **Real-time**: Supabase Realtime
+
+### **배포 & 인프라**
+
+- **Deployment**: Vercel
 - **IDE**: Cursor IDE (AI 코딩 어시스턴트)
 - **Project Management**: Taskmaster (AI 기반 작업 관리)
 
+## 🎯 주요 기능
+
+### **MVP 기능 (Phase 1)**
+
+- [x] Next.js 14 프로젝트 초기화
+- [ ] Supabase 데이터베이스 스키마 설계 및 Drizzle ORM 설정
+- [ ] Supabase Auth 기반 인증 시스템 구현
+- [ ] 핵심 UI 컴포넌트 및 반응형 레이아웃 개발
+- [ ] Memo CRUD 기능 구현
+- [ ] 메모 목록 및 상세 페이지 구현
+- [ ] 기본 검색 기능 구현
+
+### **AI 기능 (Phase 2)**
+
+- [ ] Anthropic Claude API 통합
+- [ ] AI 기반 메모 요약 기능
+- [ ] AI 기반 자동 카테고리 분류
+- [ ] AI 처리 상태 관리
+- [ ] Web Speech API 통합
+- [ ] 실시간 음성 녹음 인터페이스 구현
+
+### **고급 기능 (Phase 3)**
+
+- [ ] 고급 검색 기능 구현
+- [ ] 사용자 통계 및 분석 대시보드
+- [ ] 메모 공유 및 실시간 협업
+- [ ] 메모 데이터 내보내기/가져오기, 백업 및 복원 기능
+
+### **품질 및 배포 (Phase 4)**
+
+- [ ] WCAG 2.1 AA 접근성 준수 강화
+- [ ] 성능 최적화 및 Vercel 배포 준비
+
 ## 🛠️ 개발 환경
 
-### 필수 도구
+### **필수 도구**
 
 - **Cursor IDE**: AI 코딩 어시스턴트가 통합된 개발 환경
 - **Taskmaster**: AI 기반 프로젝트 관리 도구
 - **Node.js**: 18.0.0 이상
 
-### 개발 환경 설정
+### **환경 변수 설정**
+
+`.env.local` 파일을 생성하고 다음 변수들을 설정하세요:
+
+```bash
+# Supabase 설정
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Anthropic Claude API
+ANTHROPIC_API_KEY=your_anthropic_api_key
+```
+
+### **개발 환경 설정**
 
 ```bash
 # 의존성 설치
@@ -31,7 +95,7 @@ npm run dev
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 결과를 확인하세요.
 
-### 빌드 및 배포
+### **빌드 및 배포**
 
 ```bash
 # 프로덕션 빌드
@@ -59,31 +123,69 @@ ai-memo-app/
 ├── .taskmaster/           # Taskmaster 설정
 │   ├── config.json       # Taskmaster 설정
 │   ├── tasks/            # 작업 관리 파일
+│   ├── docs/             # 프로젝트 문서
+│   │   └── prd.txt       # 제품 요구사항 문서
 │   └── templates/        # 템플릿 파일
 └── package.json           # 프로젝트 설정
 ```
 
-## 🎯 주요 기능 (예정)
+## 📊 프로젝트 진행 상황
 
-- [ ] AI 기반 메모 생성 및 편집
-- [ ] 실시간 메모 동기화
-- [ ] 태그 및 카테고리 관리
-- [ ] 검색 및 필터링
-- [ ] 다크 모드 지원
+### **전체 태스크 현황**
+
+- **총 태스크 수**: 19개
+- **총 서브태스크 수**: 95개
+- **완료된 태스크**: 1개 (Next.js 14 프로젝트 초기화)
+- **진행률**: 약 5%
+
+### **복잡도별 태스크 분류**
+
+- **높은 복잡도 (7점)**: 5개 태스크
+- **중간 복잡도 (6점)**: 2개 태스크
+- **보통 복잡도 (5점)**: 12개 태스크
+
+### **우선순위별 진행 계획**
+
+1. **기반 구축**: 데이터베이스, 인증, UI 컴포넌트
+2. **핵심 기능**: CRUD, 검색, 목록/상세 페이지
+3. **AI 통합**: Claude API, 음성 인식, 요약/분류
+4. **고급 기능**: 실시간 협업, 분석, 고급 검색
+5. **품질 보장**: 접근성, 성능 최적화, 배포
 
 ## 🎯 AI 기반 개발 환경
 
-### Cursor IDE 설정
+### **Cursor IDE 설정**
 
 - **MCP 서버**: AI 도구 통합을 위한 설정
 - **코딩 규칙**: 일관된 코드 스타일 및 품질 관리
 - **AI 어시스턴트**: 실시간 코드 제안 및 리팩토링
 
-### Taskmaster 설정
+### **Taskmaster 설정**
 
 - **작업 관리**: AI 기반 작업 분해 및 우선순위 설정
 - **프로젝트 계획**: 체계적인 개발 로드맵 관리
 - **진행 추적**: 실시간 작업 진행 상황 모니터링
+
+## 🚀 배포
+
+### **Vercel 배포**
+
+```bash
+# Vercel CLI 설치
+npm i -g vercel
+
+# 배포
+vercel --prod
+```
+
+### **환경 변수 설정 (Vercel)**
+
+Vercel 대시보드에서 다음 환경 변수들을 설정하세요:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ANTHROPIC_API_KEY`
 
 ## 🤝 기여하기
 
@@ -91,7 +193,7 @@ ai-memo-app/
 2. Fork 후 기능 브랜치를 생성하세요 (`feature/이슈번호` 형식)
 3. 변경사항을 커밋하고 Pull Request를 생성하세요
 
-### 커밋 메시지 규칙
+### **커밋 메시지 규칙**
 
 - 한국어 명령조 사용 (예: "기능 추가하라", "버그 수정하라")
 - 구조: `[작업내용] [목적]하라`
@@ -105,5 +207,13 @@ ai-memo-app/
 - [Next.js 문서](https://nextjs.org/docs)
 - [Tailwind CSS 문서](https://tailwindcss.com/docs)
 - [TypeScript 문서](https://www.typescriptlang.org/docs)
+- [Supabase 문서](https://supabase.com/docs)
+- [Drizzle ORM 문서](https://orm.drizzle.team/)
+- [Anthropic Claude API](https://docs.anthropic.com/)
 - [Cursor IDE](https://cursor.sh/)
 - [Taskmaster](https://github.com/taskmaster-ai/taskmaster)
+- [Vercel](https://vercel.com/)
+
+---
+
+**Memora** - AI가 이해하는 스마트 메모장 🧠✨

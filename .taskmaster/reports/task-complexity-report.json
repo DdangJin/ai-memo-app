@@ -1,9 +1,9 @@
 {
 	"meta": {
-		"generatedAt": "2025-07-28T05:29:34.979Z",
-		"tasksAnalyzed": 15,
-		"totalTasks": 15,
-		"analysisCount": 15,
+		"generatedAt": "2025-07-28T10:58:12.486Z",
+		"tasksAnalyzed": 19,
+		"totalTasks": 19,
+		"analysisCount": 19,
 		"thresholdScore": 5,
 		"projectName": "Taskmaster",
 		"usedResearch": true
@@ -11,122 +11,154 @@
 	"complexityAnalysis": [
 		{
 			"taskId": 1,
-			"taskTitle": "프로젝트 초기화 및 개발 환경 설정",
-			"complexityScore": 6,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Break down the project initialization and environment setup into: (1) Next.js 14 project creation, (2) TypeScript integration, (3) Tailwind CSS setup, (4) ESLint and Prettier configuration, (5) base project structure creation using the app directory, and (6) verification of development server and tooling.",
-			"reasoning": "Setting up a modern Next.js 14 project with TypeScript, Tailwind CSS, ESLint, and Prettier is moderately complex due to the need for correct configuration and integration of multiple tools. Each setup step is distinct and critical for maintainability and scalability, following best practices for project structure and code quality.[1][2][3][4]"
+			"taskTitle": "Initialize Next.js 14 Project with TypeScript, TailwindCSS, ESLint, and Prettier",
+			"complexityScore": 5,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Expand this task into detailed steps covering: (1) Next.js 14 project initialization with TypeScript, (2) TailwindCSS installation and configuration, (3) ESLint and Prettier setup for both frontend and backend, (4) removal of default boilerplate and creation of a clean, scalable project structure (including app, components, styles, and API routes), (5) updating package.json scripts for fullstack workflows, (6) license and metadata configuration, and (7) initializing Git with a proper .gitignore. For each, specify commands, configuration file changes, and verification steps.",
+			"reasoning": "This is a standard but multi-faceted setup task for a modern Next.js 14 fullstack project. It requires knowledge of project scaffolding, TypeScript, TailwindCSS, linting/formatting tools, and best practices for project structure and version control. Each tool has its own configuration and integration steps, but the process is well-documented and follows established patterns. Complexity is moderate due to the need for cross-tool integration and ensuring a clean, scalable foundation.[1][2][4]"
 		},
 		{
 			"taskId": 2,
-			"taskTitle": "데이터베이스 설계 및 Prisma 설정",
+			"taskTitle": "Design Supabase Database Schema and Configure Drizzle ORM",
 			"complexityScore": 7,
-			"recommendedSubtasks": 5,
-			"expansionPrompt": "Expand this task into: (1) Supabase project and database initialization, (2) schema design for User and Memo models, (3) relationship and migration setup, (4) Drizzle ORM configuration and integration, (5) database connection and migration verification.",
-			"reasoning": "Designing a relational schema, integrating with Supabase, and configuring Drizzle ORM involves multiple steps: schema design, migration, and ORM setup. Each step requires careful planning to ensure data integrity and maintainability, and aligns with industry standards for modern full-stack applications."
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Break down this task into: (1) requirements analysis and ERD design, (2) schema definition for profiles and memos (including normalization, keys, and constraints), (3) Supabase migration scripts and version control, (4) Drizzle ORM model definitions with TypeScript types, (5) integration and type validation between Drizzle and Supabase, (6) documentation and ER diagrams, (7) test data and CRUD operation verification, and (8) schema change management for future evolution.",
+			"reasoning": "Designing a robust relational schema and integrating it with Drizzle ORM in a Supabase environment involves both database and application-layer concerns. It requires careful planning for normalization, constraints, migrations, and type safety, as well as documentation and reproducibility. The need for versioned migrations, ER diagrams, and integration testing increases complexity above a basic schema setup."
 		},
 		{
 			"taskId": 4,
-			"taskTitle": "기본 UI 컴포넌트 및 레이아웃 구성",
-			"complexityScore": 5,
-			"recommendedSubtasks": 4,
-			"expansionPrompt": "Decompose into: (1) header component creation, (2) navigation component creation, (3) main layout structure implementation, (4) responsive design and accessibility enhancements.",
-			"reasoning": "Building foundational UI components and layouts is a standard but essential task. It involves creating reusable components, ensuring responsive design, and addressing accessibility, all of which are best practices in modern frontend development."
-		},
-		{
-			"taskId": 8,
-			"taskTitle": "OpenAI API 연동 및 설정",
-			"complexityScore": 5,
-			"recommendedSubtasks": 4,
-			"expansionPrompt": "Expand into: (1) environment variable setup for API keys, (2) API client implementation for Claude, (3) secure API key management, (4) error handling and integration testing.",
-			"reasoning": "Integrating an external API (Claude) and managing secrets securely is moderately complex. It requires careful handling of environment variables, API client setup, and robust error handling, following security and maintainability best practices."
-		},
-		{
-			"taskId": 9,
-			"taskTitle": "AI 텍스트 요약 기능 구현",
+			"taskTitle": "Develop Core UI Components and Responsive Layout with Accessibility Compliance",
 			"complexityScore": 6,
-			"recommendedSubtasks": 5,
-			"expansionPrompt": "Break down into: (1) API request logic for summarization, (2) UI integration for summary feature, (3) error and loading state handling, (4) summary quality evaluation, (5) performance optimization.",
-			"reasoning": "Implementing AI-powered summarization involves API integration, UI/UX considerations, and quality/performance validation. Each aspect is important for a robust, user-friendly feature and aligns with best practices for AI feature delivery."
-		},
-		{
-			"taskId": 10,
-			"taskTitle": "카테고리 자동 분류 기능 구현",
-			"complexityScore": 6,
-			"recommendedSubtasks": 5,
-			"expansionPrompt": "Expand into: (1) API request logic for classification, (2) UI integration for category display, (3) mapping and storing classification results, (4) error and loading state handling, (5) accuracy and performance testing.",
-			"reasoning": "AI-based classification requires careful API integration, result handling, and validation. Ensuring accuracy and a seamless user experience is moderately complex and follows industry standards for deploying AI-driven features."
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Expand into subtasks for: (1) component directory and naming conventions, (2) Header component with branding and navigation triggers, (3) Navigation component with keyboard and ARIA support, (4) Layout component with responsive grid/flexbox, (5) TailwindCSS responsive styling, (6) accessibility audits (WCAG 2.1 AA), (7) automated and manual accessibility testing, and (8) component documentation with usage and accessibility notes.",
+			"reasoning": "Building foundational UI components with strict accessibility and responsive design requirements is moderately complex. It requires not only implementation but also adherence to WCAG standards, semantic HTML, ARIA, and responsive CSS. Testing and documentation are essential for maintainability and compliance, increasing the number of necessary subtasks."
 		},
 		{
 			"taskId": 12,
-			"taskTitle": "Web Speech API 연동",
-			"complexityScore": 4,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Decompose into: (1) Web Speech API integration and permission handling, (2) basic voice input UI implementation, (3) browser compatibility and error handling.",
-			"reasoning": "Integrating the Web Speech API is relatively straightforward but requires attention to browser compatibility and user permissions. The task is less complex but still benefits from clear separation of concerns."
+			"taskTitle": "Integrate Web Speech API for In-Browser Speech Recognition and Basic Voice Input",
+			"complexityScore": 5,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand into: (1) browser compatibility detection and fallback UI, (2) React hook/service for SpeechRecognition lifecycle, (3) event handling for speech recognition (onstart, onresult, onerror, onend), (4) microphone permission management and error handling, (5) accessible UI components for voice input, and (6) integration with memo creation/editing workflows.",
+			"reasoning": "Integrating the Web Speech API is straightforward in supported browsers but requires careful handling of compatibility, permissions, and accessibility. The need for robust error handling, fallback messaging, and accessible UI increases the implementation scope, but the underlying APIs are well-documented and commonly used."
+		},
+		{
+			"taskId": 19,
+			"taskTitle": "Optimize Performance and Prepare for Vercel Deployment",
+			"complexityScore": 7,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Expand into: (1) code splitting and dynamic imports, (2) image optimization with Next.js Image component, (3) Vercel deployment configuration (vercel.json, env vars, build scripts), (4) Vercel Edge Cache and ISR setup, (5) monitoring integration (Vercel Analytics, Sentry), (6) performance testing and Lighthouse audits, (7) deployment verification and rollback procedures, and (8) deployment and optimization documentation.",
+			"reasoning": "Performance optimization and deployment for Next.js 14 on Vercel involves advanced configuration, code refactoring, and integration with platform-specific features (Edge Cache, ISR, analytics). Ensuring production readiness requires thorough testing, monitoring, and documentation, making this a moderately high-complexity task."
 		},
 		{
 			"taskId": 13,
-			"taskTitle": "음성 녹음 인터페이스 구현",
-			"complexityScore": 5,
-			"recommendedSubtasks": 4,
-			"expansionPrompt": "Expand into: (1) record button and UI state management, (2) real-time voice-to-text conversion, (3) recording status feedback, (4) integration with memo creation.",
-			"reasoning": "Building a user-friendly voice recording interface with real-time transcription involves UI state management and API integration. This is moderately complex due to the need for real-time feedback and seamless UX."
-		},
-		{
-			"taskId": 14,
-			"taskTitle": "음성 메모 편집 기능 구현",
-			"complexityScore": 4,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down into: (1) editable text area for transcribed voice, (2) voice memo display and management UI, (3) save and update logic for edited memos.",
-			"reasoning": "Editing and managing transcribed voice memos is a standard CRUD-like UI task, with moderate complexity due to the need for intuitive editing and management interfaces."
-		},
-		{
-			"taskId": 15,
-			"taskTitle": "성능 최적화 및 배포 준비",
-			"complexityScore": 7,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Expand into: (1) code splitting and dynamic imports, (2) image optimization, (3) Vercel deployment configuration, (4) Edge Cache setup, (5) performance monitoring integration, (6) production readiness verification.",
-			"reasoning": "Preparing for production deployment and optimizing performance involves several advanced steps: code splitting, asset optimization, deployment configuration, and monitoring. Each is critical for a performant, scalable application and aligns with best practices for modern web deployment."
+			"taskTitle": "Implement Voice Recording Interface with Real-Time Speech-to-Text and Editing",
+			"complexityScore": 6,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Expand into: (1) UI design for recording controls and status, (2) MediaRecorder API integration for audio capture, (3) real-time speech-to-text transcription with Web Speech API, (4) editable transcript UI with undo/redo, (5) audio-transcript synchronization and playback controls, (6) error handling and accessibility, and (7) integration with memo workflows.",
+			"reasoning": "Combining audio recording, real-time transcription, and editable UI with accessibility and error handling is moderately complex. It requires coordination between browser APIs, state management, and user experience design, as well as robust handling of permissions and browser differences."
 		},
 		{
 			"taskId": 3,
-			"taskTitle": "기본 인증 시스템 구현",
+			"taskTitle": "Implement Supabase Auth-Based Authentication System with Session Management and RLS",
+			"complexityScore": 7,
+			"recommendedSubtasks": 9,
+			"expansionPrompt": "Expand into: (1) Supabase Auth package installation and configuration, (2) signup/login UI and backend flows, (3) session management and persistence, (4) protected route implementation, (5) user-data linkage via auth.users, (6) RLS policy definition and enforcement, (7) error handling and edge case management, (8) documentation of flows and policies, and (9) automated and manual security testing.",
+			"reasoning": "Implementing a secure, full-featured authentication system with session management and RLS involves both frontend and backend integration, security policy definition, and robust error handling. Ensuring correct linkage between auth.users and application data, as well as comprehensive documentation and testing, increases complexity."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Integrate and Configure Anthropic Claude API (API Key, Basic Integration, Env Management, Security)",
 			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 기본 인증 시스템 구현.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand into: (1) Anthropic SDK installation and dependency management, (2) secure API key storage and environment variable setup, (3) service module for Claude client initialization, (4) backend API routes for memo AI features, (5) security best practices (access control, input validation, error handling), and (6) integration and troubleshooting documentation.",
+			"reasoning": "Integrating a third-party AI API with secure key management and backend routing is a standard backend integration task. Security and documentation are critical, but the process is well-supported by SDKs and best practices, keeping complexity moderate."
+		},
+		{
+			"taskId": 18,
+			"taskTitle": "Enhance Accessibility and Achieve WCAG 2.1 AA Compliance",
+			"complexityScore": 7,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Expand into: (1) keyboard navigation and focus management, (2) screen reader support with semantic HTML and ARIA, (3) color contrast audits and remediation, (4) automated accessibility testing pipeline, (5) manual accessibility audits, (6) accessibility documentation and team training, (7) integration of accessibility checks into CI/CD, and (8) ongoing compliance monitoring.",
+			"reasoning": "Achieving and maintaining WCAG 2.1 AA compliance across a modern web application is a significant undertaking. It requires systematic audits, code changes, testing (automated and manual), documentation, and process integration to ensure ongoing compliance as the application evolves."
+		},
+		{
+			"taskId": 17,
+			"taskTitle": "Implement Memo Data Export/Import, Backup, and Restore Functionality",
+			"complexityScore": 7,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Expand into: (1) export API endpoints for user data (JSON/CSV), (2) import API with schema validation and conflict handling, (3) backup and restore workflows (user and admin), (4) security and privacy enforcement for data operations, (5) user-facing documentation and guides, (6) admin documentation and monitoring, (7) automated and manual testing of import/export/restore, and (8) error handling and rollback procedures.",
+			"reasoning": "Implementing robust data export/import and backup/restore features involves backend API development, data validation, security, user experience, and documentation. Handling edge cases, schema evolution, and privacy requirements adds to the complexity, especially for multi-user environments."
 		},
 		{
 			"taskId": 5,
-			"taskTitle": "메모 CRUD 기능 구현",
+			"taskTitle": "Implement Memo CRUD Functionality with Drizzle ORM and Auth Integration",
 			"complexityScore": 5,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 메모 crud 기능 구현.",
+			"expansionPrompt": "Break down this task with a focus on implement memo crud functionality with drizzle orm and auth integration.",
 			"reasoning": "Automatically added due to missing analysis in AI response."
 		},
 		{
 			"taskId": 6,
-			"taskTitle": "메모 목록 및 상세 보기 페이지 구현",
+			"taskTitle": "Implement Memo List and Detail Pages with Pagination, Sorting, and Responsive Design",
 			"complexityScore": 5,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 메모 목록 및 상세 보기 페이지 구현.",
+			"expansionPrompt": "Break down this task with a focus on implement memo list and detail pages with pagination, sorting, and responsive design.",
 			"reasoning": "Automatically added due to missing analysis in AI response."
 		},
 		{
 			"taskId": 7,
-			"taskTitle": "기본 검색 기능 구현",
+			"taskTitle": "Implement Basic Search Functionality with Supabase Full-Text Search",
 			"complexityScore": 5,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 기본 검색 기능 구현.",
+			"expansionPrompt": "Break down this task with a focus on implement basic search functionality with supabase full-text search.",
+			"reasoning": "Automatically added due to missing analysis in AI response."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Implement AI-Powered Memo Summarization Using Claude API",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down this task with a focus on implement ai-powered memo summarization using claude api.",
+			"reasoning": "Automatically added due to missing analysis in AI response."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Implement AI-Based Automatic Memo Category Classification Using Claude API",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down this task with a focus on implement ai-based automatic memo category classification using claude api.",
 			"reasoning": "Automatically added due to missing analysis in AI response."
 		},
 		{
 			"taskId": 11,
-			"taskTitle": "AI 처리 상태 관리 구현",
+			"taskTitle": "Implement AI Processing State Management (Loading, Error, and UX Enhancements)",
 			"complexityScore": 5,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on ai 처리 상태 관리 구현.",
+			"expansionPrompt": "Break down this task with a focus on implement ai processing state management (loading, error, and ux enhancements).",
+			"reasoning": "Automatically added due to missing analysis in AI response."
+		},
+		{
+			"taskId": 14,
+			"taskTitle": "Implement Advanced Search Features: Tag-Based, Date Range, Category Filtering, and Enhanced Supabase Full-Text Search",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down this task with a focus on implement advanced search features: tag-based, date range, category filtering, and enhanced supabase full-text search.",
+			"reasoning": "Automatically added due to missing analysis in AI response."
+		},
+		{
+			"taskId": 15,
+			"taskTitle": "Implement User Statistics and Analytics Dashboard with Usage Pattern Analysis and Visualization",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down this task with a focus on implement user statistics and analytics dashboard with usage pattern analysis and visualization.",
+			"reasoning": "Automatically added due to missing analysis in AI response."
+		},
+		{
+			"taskId": 16,
+			"taskTitle": "Implement Memo Sharing and Real-Time Collaboration with Supabase Realtime",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down this task with a focus on implement memo sharing and real-time collaboration with supabase realtime.",
 			"reasoning": "Automatically added due to missing analysis in AI response."
 		}
 	]
