@@ -110,7 +110,7 @@ npm run lint
 
 ## 📁 프로젝트 구조
 
-```
+```text
 ai-memo-app/
 ├── app/                    # Next.js App Router
 │   ├── layout.tsx         # 루트 레이아웃
