@@ -71,16 +71,39 @@ AI 기술을 활용한 스마트 메모 애플리케이션입니다. 음성과 �
 
 ### **환경 변수 설정**
 
-`.env.local` 파일을 생성하고 다음 변수들을 설정하세요:
+프로젝트 루트에 `.env.local` 파일을 생성하고 `env.example`을 참고하여 다음 변수들을 설정하세요:
+
+#### **필수 API 키 (해당 기능을 사용하려면 필요)**
 
 ```bash
-# Supabase 설정
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+# Anthropic Claude API (필수)
+ANTHROPIC_API_KEY="sk-ant-api03-..."  # Claude AI 기능 사용시
 
-# Anthropic Claude API
-ANTHROPIC_API_KEY=your_anthropic_api_key
+# Supabase 설정 (필수)
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
+SUPABASE_SERVICE_ROLE_KEY="your_service_role_key"
+
+# 데이터베이스 연결 (Supabase PostgreSQL)
+DATABASE_URL="postgresql://postgres.${password}:${project-id}@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres"
+```
+
+#### **선택적 API 키 (추가 기능 사용시)**
+
+```bash
+# AI 모델 선택 (하나 이상 선택)
+PERPLEXITY_API_KEY="pplx-..."           # Perplexity AI 연구용
+OPENAI_API_KEY="sk-proj-..."            # OpenAI 모델용
+GOOGLE_API_KEY="your_google_api_key"    # Google Gemini 모델용
+MISTRAL_API_KEY="your_mistral_api_key"  # Mistral AI 모델용
+XAI_API_KEY="your_xai_key"              # xAI 모델용
+GROQ_API_KEY="your_groq_key"            # Groq 모델용
+OPENROUTER_API_KEY="your_openrouter_key" # OpenRouter 모델용
+AZURE_OPENAI_API_KEY="your_azure_key"   # Azure OpenAI 모델용
+OLLAMA_API_KEY="your_ollama_key"        # 원격 Ollama 서버용
+
+# GitHub 기능 (선택적)
+GITHUB_API_KEY="ghp_..."                # GitHub 가져오기/내보내기 기능용
 ```
 
 ### **개발 환경 설정**
@@ -126,6 +149,7 @@ ai-memo-app/
 │   ├── docs/             # 프로젝트 문서
 │   │   └── prd.txt       # 제품 요구사항 문서
 │   └── templates/        # 템플릿 파일
+├── env.example           # 환경 변수 예시 파일
 └── package.json           # 프로젝트 설정
 ```
 
@@ -182,10 +206,26 @@ vercel --prod
 
 Vercel 대시보드에서 다음 환경 변수들을 설정하세요:
 
+#### **필수 환경 변수**
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ANTHROPIC_API_KEY`
+- `DATABASE_URL`
+
+#### **선택적 환경 변수**
+
+- `PERPLEXITY_API_KEY`
+- `OPENAI_API_KEY`
+- `GOOGLE_API_KEY`
+- `MISTRAL_API_KEY`
+- `XAI_API_KEY`
+- `GROQ_API_KEY`
+- `OPENROUTER_API_KEY`
+- `AZURE_OPENAI_API_KEY`
+- `OLLAMA_API_KEY`
+- `GITHUB_API_KEY`
 
 ## 🤝 기여하기
 
