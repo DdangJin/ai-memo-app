@@ -19,6 +19,8 @@ export interface SearchResult {
 export interface SearchResponse {
   memos: SearchResult[];
   query: string;
+  isStopWordQuery?: boolean;
+  stopWordMessage?: string;
   pagination: {
     page: number;
     limit: number;
@@ -49,6 +51,9 @@ export default function SearchInput({
   const [query, setQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [isStopWordQuery, setIsStopWordQuery] = useState(false);
+  const [stopWordMessage, setStopWordMessage] = useState<string>('');
+
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -96,8 +101,14 @@ export default function SearchInput({
           throw new Error('검색 중 오류가 발생했습니다.');
         }
 
-        const data: SearchResponse = await response.json();
+        const apiResponse = await response.json();
+
+        // createSuccessResponse 구조에 맞게 데이터 추출
+        const data: SearchResponse = apiResponse.data || apiResponse;
+
         setResults(data.memos);
+        setIsStopWordQuery(data.isStopWordQuery || false);
+        setStopWordMessage(data.stopWordMessage || '');
         onResults?.(data.memos, searchQuery, false);
       } catch (error) {
         // AbortError는 무시 (의도적인 취소)
@@ -112,6 +123,8 @@ export default function SearchInput({
             : '검색 중 오류가 발생했습니다.';
         onError?.(errorMessage);
         setResults([]);
+        setIsStopWordQuery(false);
+        setStopWordMessage('');
         onResults?.([], searchQuery, false);
       } finally {
         setIsSearching(false);
@@ -155,7 +168,8 @@ export default function SearchInput({
   const clearSearch = useCallback(() => {
     setQuery('');
     setResults([]);
-    setIsSearching(false);
+    setIsStopWordQuery(false);
+    setStopWordMessage('');
     onResults?.([], '', false);
 
     // 진행 중인 요청 취소
@@ -163,7 +177,7 @@ export default function SearchInput({
       abortControllerRef.current.abort();
     }
 
-    // 대기 중인 타이머 취소
+    // 디바운스 타이머 정리
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
@@ -220,12 +234,21 @@ export default function SearchInput({
         <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           {isSearching ? (
             <span>검색 중...</span>
-          ) : results.length > 0 ? (
+          ) : (results || []).length > 0 ? (
             <span>
-              "{query}"에 대한 검색 결과: {results.length}개
+              &quot;{query}&quot;에 대한 검색 결과: {(results || []).length}개
             </span>
           ) : query.trim() ? (
-            <span>"{query}"에 대한 검색 결과가 없습니다.</span>
+            <div className="space-y-1">
+              <span>&quot;{query}&quot;에 대한 검색 결과가 없습니다.</span>
+              {isStopWordQuery && (
+                <div className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded">
+                  💡{' '}
+                  {stopWordMessage ||
+                    '검색하신 단어는 일반적인 단어로 검색에서 제외됩니다. 더 구체적인 키워드를 사용해보세요.'}
+                </div>
+              )}
+            </div>
           ) : null}
         </div>
       )}
