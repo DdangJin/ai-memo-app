@@ -9,6 +9,7 @@ import {
   timestamp,
   pgEnum,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { relations } from 'drizzle-orm';
 
 // Enums
@@ -136,6 +137,8 @@ export const memos = pgTable('public.memos', {
   isFavorite: boolean('is_favorite').default(false),
   aiSummary: text('ai_summary'),
   aiTags: text('ai_tags').array(),
+  // Full-text search column (generated column in database)
+  fts: text('fts'),
   metadata: jsonb('metadata').default('{}'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),

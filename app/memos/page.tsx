@@ -4,6 +4,8 @@ import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import SearchInput, { SearchResult } from '@/components/forms/SearchInput';
+import TextHighlight from '@/components/common/TextHighlight';
 
 // 메모 타입 정의
 interface Memo {
@@ -31,78 +33,88 @@ interface MemoListResponse {
 }
 
 // 메모 카드 컴포넌트 (React.memo로 최적화)
-const MemoCard = memo(({ memo }: { memo: Memo }) => {
-  // 메모 시간 포맷팅 (메모화)
-  const formattedCreatedAt = useMemo(() => {
-    return new Date(memo.createdAt).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  }, [memo.createdAt]);
+const MemoCard = memo(
+  ({ memo, searchTerms = [] }: { memo: Memo; searchTerms?: string[] }) => {
+    // 메모 시간 포맷팅 (메모화)
+    const formattedCreatedAt = useMemo(() => {
+      return new Date(memo.createdAt).toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }, [memo.createdAt]);
 
-  const formattedUpdatedAt = useMemo(() => {
-    if (memo.updatedAt === memo.createdAt) return null;
-    return new Date(memo.updatedAt).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  }, [memo.updatedAt, memo.createdAt]);
+    const formattedUpdatedAt = useMemo(() => {
+      if (memo.updatedAt === memo.createdAt) return null;
+      return new Date(memo.updatedAt).toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }, [memo.updatedAt, memo.createdAt]);
 
-  return (
-    <Link
-      href={`/memos/${memo.id}`}
-      className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700"
-    >
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-1">
-            {memo.title}
-          </h3>
-          <div className="flex items-center space-x-2 ml-4">
-            {memo.isFavorite && (
-              <span className="text-yellow-500" aria-label="즐겨찾기">
-                <svg
-                  className="w-4 h-4"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
-              </span>
-            )}
-            {memo.voiceUrl && (
-              <span className="text-blue-500" aria-label="음성 메모">
-                <svg
-                  className="w-4 h-4"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
-                  <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                </svg>
-              </span>
-            )}
+    return (
+      <Link
+        href={`/memos/${memo.id}`}
+        className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700"
+      >
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-1">
+              {searchTerms.length > 0 ? (
+                <TextHighlight text={memo.title} searchTerms={searchTerms} />
+              ) : (
+                memo.title
+              )}
+            </h3>
+            <div className="flex items-center space-x-2 ml-4">
+              {memo.isFavorite && (
+                <span className="text-yellow-500" aria-label="즐겨찾기">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                </span>
+              )}
+              {memo.voiceUrl && (
+                <span className="text-blue-500" aria-label="음성 메모">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                  </svg>
+                </span>
+              )}
+            </div>
+          </div>
+          {memo.content && (
+            <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
+              {searchTerms.length > 0 ? (
+                <TextHighlight text={memo.content} searchTerms={searchTerms} />
+              ) : (
+                memo.content
+              )}
+            </p>
+          )}
+          <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+            <span>생성: {formattedCreatedAt}</span>
+            {formattedUpdatedAt && <span>수정: {formattedUpdatedAt}</span>}
           </div>
         </div>
-        {memo.content && (
-          <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
-            {memo.content}
-          </p>
-        )}
-        <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-          <span>생성: {formattedCreatedAt}</span>
-          {formattedUpdatedAt && <span>수정: {formattedUpdatedAt}</span>}
-        </div>
-      </div>
-    </Link>
-  );
-});
+      </Link>
+    );
+  }
+);
 
 MemoCard.displayName = 'MemoCard';
 
@@ -119,6 +131,10 @@ export default function MemosPage() {
     'createdAt'
   );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [isSearchMode, setIsSearchMode] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchError, setSearchError] = useState<string | null>(null);
   const limit = 10; // 페이지당 메모 개수
 
   // 인증되지 않은 사용자 리디렉션
@@ -231,6 +247,33 @@ export default function MemosPage() {
     [sortBy, sortOrder, fetchMemos]
   );
 
+  // 검색 결과 처리 핸들러
+  const handleSearchResults = useCallback(
+    (results: SearchResult[], query: string, isSearching: boolean) => {
+      setSearchResults(results);
+      setSearchQuery(query);
+      setIsSearchMode(!!query.trim() || isSearching);
+      setSearchError(null);
+    },
+    []
+  );
+
+  // 검색어를 배열로 분할 (하이라이트용)
+  const searchTermsArray = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return searchQuery
+      .trim()
+      .split(/\s+/)
+      .filter(term => term.length > 0)
+      .map(term => term.replace(/[^\w가-힣]/g, '')) // 특수문자 제거
+      .filter(term => term.length > 0);
+  }, [searchQuery]);
+
+  // 검색 에러 처리 핸들러
+  const handleSearchError = useCallback((error: string) => {
+    setSearchError(error);
+  }, []);
+
   // 페이지네이션 렌더링 (useMemo로 최적화)
   const renderPagination = useMemo(() => {
     if (totalPages <= 1) return null;
@@ -335,7 +378,9 @@ export default function MemosPage() {
                 내 메모
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">
-                총 {total}개의 메모
+                {isSearchMode && searchQuery
+                  ? `"${searchQuery}" 검색 결과: ${searchResults.length}개`
+                  : `총 ${total}개의 메모`}
               </p>
             </div>
             <Link
@@ -346,80 +391,89 @@ export default function MemosPage() {
             </Link>
           </div>
 
-          {/* 정렬 컨트롤 */}
-          <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              정렬:
-            </span>
-            <div
-              className="flex flex-wrap gap-2"
-              role="group"
-              aria-label="메모 정렬 옵션"
-            >
-              <button
-                onClick={() => handleSortChange('createdAt')}
-                className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  sortBy === 'createdAt'
-                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                }`}
-                aria-pressed={sortBy === 'createdAt'}
-                aria-label={`생성일순 정렬 ${sortBy === 'createdAt' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
+          {/* 검색 입력 */}
+          <SearchInput
+            onResults={handleSearchResults}
+            onError={handleSearchError}
+            className="max-w-md"
+          />
+
+          {/* 정렬 컨트롤 - 검색 모드가 아닐 때만 표시 */}
+          {!isSearchMode && (
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                정렬:
+              </span>
+              <div
+                className="flex flex-wrap gap-2"
+                role="group"
+                aria-label="메모 정렬 옵션"
               >
-                생성일
-                {sortBy === 'createdAt' && (
-                  <span className="ml-1" aria-hidden="true">
-                    {sortOrder === 'desc' ? '↓' : '↑'}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => handleSortChange('updatedAt')}
-                className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  sortBy === 'updatedAt'
-                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                }`}
-                aria-pressed={sortBy === 'updatedAt'}
-                aria-label={`수정일순 정렬 ${sortBy === 'updatedAt' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
-              >
-                수정일
-                {sortBy === 'updatedAt' && (
-                  <span className="ml-1" aria-hidden="true">
-                    {sortOrder === 'desc' ? '↓' : '↑'}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => handleSortChange('title')}
-                className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  sortBy === 'title'
-                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                }`}
-                aria-pressed={sortBy === 'title'}
-                aria-label={`제목순 정렬 ${sortBy === 'title' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
-              >
-                제목
-                {sortBy === 'title' && (
-                  <span className="ml-1" aria-hidden="true">
-                    {sortOrder === 'desc' ? '↓' : '↑'}
-                  </span>
-                )}
-              </button>
+                <button
+                  onClick={() => handleSortChange('createdAt')}
+                  className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    sortBy === 'createdAt'
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+                  aria-pressed={sortBy === 'createdAt'}
+                  aria-label={`생성일순 정렬 ${sortBy === 'createdAt' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
+                >
+                  생성일
+                  {sortBy === 'createdAt' && (
+                    <span className="ml-1" aria-hidden="true">
+                      {sortOrder === 'desc' ? '↓' : '↑'}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => handleSortChange('updatedAt')}
+                  className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    sortBy === 'updatedAt'
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+                  aria-pressed={sortBy === 'updatedAt'}
+                  aria-label={`수정일순 정렬 ${sortBy === 'updatedAt' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
+                >
+                  수정일
+                  {sortBy === 'updatedAt' && (
+                    <span className="ml-1" aria-hidden="true">
+                      {sortOrder === 'desc' ? '↓' : '↑'}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => handleSortChange('title')}
+                  className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    sortBy === 'title'
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+                  aria-pressed={sortBy === 'title'}
+                  aria-label={`제목순 정렬 ${sortBy === 'title' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
+                >
+                  제목
+                  {sortBy === 'title' && (
+                    <span className="ml-1" aria-hidden="true">
+                      {sortOrder === 'desc' ? '↓' : '↑'}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* 에러 상태 */}
-        {error && (
+        {(error || searchError) && (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6">
-            {error}
+            {error || searchError}
           </div>
         )}
 
         {/* 메모 목록 */}
-        {memos.length === 0 ? (
+        {(isSearchMode ? searchResults : memos).length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 dark:text-gray-500 mb-4">
               <svg
@@ -437,10 +491,12 @@ export default function MemosPage() {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              메모가 없습니다
+              {isSearchMode ? '검색 결과가 없습니다' : '메모가 없습니다'}
             </h3>
             <p className="text-gray-500 dark:text-gray-400 mb-4">
-              첫 번째 메모를 작성해보세요!
+              {isSearchMode
+                ? '다른 검색어로 시도해보세요.'
+                : '첫 번째 메모를 작성해보세요!'}
             </p>
             <Link
               href="/memos/new"
@@ -453,13 +509,17 @@ export default function MemosPage() {
           <>
             {/* 메모 카드 목록 */}
             <div className="space-y-4 mb-8">
-              {memos.map(memo => (
-                <MemoCard key={memo.id} memo={memo} />
+              {(isSearchMode ? searchResults : memos).map(memo => (
+                <MemoCard
+                  key={memo.id}
+                  memo={memo}
+                  searchTerms={isSearchMode ? searchTermsArray : []}
+                />
               ))}
             </div>
 
-            {/* 페이지네이션 */}
-            {renderPagination}
+            {/* 페이지네이션 - 검색 모드가 아닐 때만 표시 */}
+            {!isSearchMode && renderPagination}
           </>
         )}
       </div>

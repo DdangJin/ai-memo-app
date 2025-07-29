@@ -418,7 +418,7 @@
         "description": "Develop search functionality for memos based on title and content using Supabase Full-Text Search, and display real-time search results in the UI.",
         "details": "1. Extend the public.memos table in Supabase to support full-text search by adding a tsvector column (e.g., 'fts') that indexes both the title and content fields. Create a GIN index on this column to optimize search performance.\n\n2. Update the database schema and Drizzle ORM models to reflect the new full-text search column and ensure it is kept up-to-date via triggers or computed columns.\n\n3. Implement a search API endpoint (e.g., /api/memos/search) that accepts a query string and uses Supabase's textSearch() function to perform full-text search on the memos table, filtering results by the authenticated user's ownership.\n\n4. On the frontend, build a search input component that captures user queries and sends them to the search API endpoint. Implement debouncing (e.g., 300ms) to avoid excessive requests during typing.\n\n5. Display search results in real time as the user types, updating the memo list dynamically. Ensure the UI remains responsive and accessible, and that search results highlight matching terms in the title or content.\n\n6. Consider edge cases such as empty queries, no results found, and error handling for failed API requests.\n\n7. Write clear documentation for the search API and UI integration.",
         "testStrategy": "- Verify that the tsvector column and GIN index are present in the memos table and that full-text search queries return accurate results for various keywords in both title and content.\n- Test the search API endpoint with different queries, ensuring it returns only memos belonging to the authenticated user and handles edge cases (empty query, no matches, invalid input).\n- On the frontend, confirm that search results update in real time as the user types, with correct debouncing and no UI lag.\n- Check that matching terms are highlighted in the results and that accessibility standards are maintained.\n- Perform integration tests to ensure the end-to-end search flow works as expected, including error handling and loading states.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           5,
           6
@@ -431,7 +431,7 @@
             "description": "Add a tsvector column (e.g., 'fts') to the public.memos table that indexes both the title and content fields. Create a GIN index on this column to optimize full-text search performance.",
             "dependencies": [],
             "details": "Use SQL to add the tsvector column and create a GIN index. Ensure the tsvector is updated automatically via triggers or computed columns to reflect changes in title or content.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that the tsvector column and GIN index exist and that updates to title or content fields are reflected in the tsvector column."
           },
           {
@@ -442,7 +442,7 @@
               "7.1"
             ],
             "details": "Update the ORM schema to include the fts column. Implement or update database triggers or computed columns to keep the tsvector column in sync with title and content changes.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test that ORM migrations succeed and that the fts column is correctly updated on memo insert and update operations."
           },
           {
@@ -453,7 +453,7 @@
               "7.2"
             ],
             "details": "Develop the API endpoint to receive search queries, execute full-text search on the memos table using the fts column, and return only memos belonging to the authenticated user.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Send various search queries to the endpoint and verify that results are accurate, filtered by user, and that edge cases (empty query, no results) are handled."
           },
           {
@@ -464,7 +464,7 @@
               "7.3"
             ],
             "details": "Implement a responsive search input with debouncing to minimize API calls during typing. Ensure the component sends queries to the backend and handles loading and error states.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test that the search input debounces requests, handles rapid typing, and displays loading or error messages as appropriate."
           },
           {
@@ -475,7 +475,7 @@
               "7.4"
             ],
             "details": "Update the UI to display search results as they arrive, highlight matching keywords, and handle cases such as empty queries, no results, and API errors. Ensure accessibility and responsiveness.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that search results update in real time, matching terms are highlighted, and the UI remains accessible and responsive under various scenarios."
           }
         ]
@@ -1311,7 +1311,7 @@
     ],
     "metadata": {
       "created": "2025-07-28T04:59:55.287Z",
-      "updated": "2025-07-29T00:53:17.031Z",
+      "updated": "2025-07-29T05:05:15.683Z",
       "description": "Tasks for master context"
     }
   }
