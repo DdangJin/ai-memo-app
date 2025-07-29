@@ -121,7 +121,7 @@ export const tags = pgTable('public.tags', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 });
 
-export const memos = pgTable('public.memos', {
+export const memos = pgTable('memos', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id')
     .notNull()
