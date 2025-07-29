@@ -10,7 +10,7 @@ export interface AuthenticatedRequest extends NextRequest {
  * API 라우트용 인증 미들웨어
  * Supabase Auth를 사용하여 사용자 인증 상태를 확인하고 user 정보를 제공
  */
-export async function withAuth(
+export function withAuth(
   handler: (req: AuthenticatedRequest) => Promise<NextResponse>
 ) {
   return async (req: NextRequest) => {
@@ -34,7 +34,7 @@ export async function withAuth(
       const authenticatedReq = req as AuthenticatedRequest;
       authenticatedReq.user = user;
 
-      return handler(authenticatedReq);
+      return await handler(authenticatedReq);
     } catch (error) {
       console.error('인증 미들웨어 오류:', error);
       return NextResponse.json(

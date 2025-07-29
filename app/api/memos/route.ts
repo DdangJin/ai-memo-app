@@ -63,7 +63,6 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
       },
     });
   } catch (error) {
-    console.error('메모 조회 오류:', error);
     return createBadRequestResponse('메모를 조회하는 중 오류가 발생했습니다.');
   }
 });

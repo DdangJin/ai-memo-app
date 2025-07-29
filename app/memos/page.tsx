@@ -32,6 +32,12 @@ interface MemoListResponse {
   };
 }
 
+// 실제 API 응답 타입 (createSuccessResponse 구조)
+interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+}
+
 // 메모 카드 컴포넌트 (React.memo로 최적화)
 const MemoCard = memo(
   ({ memo, searchTerms = [] }: { memo: Memo; searchTerms?: string[] }) => {
@@ -156,8 +162,6 @@ export default function MemosPage() {
         const searchParams = new URLSearchParams({
           page: page.toString(),
           limit: limit.toString(),
-          sortBy: sort || sortBy,
-          sortOrder: order || sortOrder,
         });
 
         const response = await fetch(`/api/memos?${searchParams.toString()}`, {
@@ -166,10 +170,18 @@ export default function MemosPage() {
         });
 
         if (!response.ok) {
+          const errorText = await response.text();
           throw new Error(`메모를 불러오는데 실패했습니다: ${response.status}`);
         }
 
-        const data: MemoListResponse = await response.json();
+        const apiResponse: ApiResponse<MemoListResponse> =
+          await response.json();
+        const data = apiResponse.data;
+
+        // Data validation
+        if (!data || !data.memos) {
+          throw new Error('API 응답에서 메모 데이터를 찾을 수 없습니다.');
+        }
 
         // 클라이언트 사이드 정렬 (API가 정렬을 지원하지 않는 경우)
         let sortedMemos = data.memos;
@@ -200,9 +212,9 @@ export default function MemosPage() {
         }
 
         setMemos(sortedMemos);
-        setCurrentPage(data.pagination.page);
-        setTotalPages(data.pagination.totalPages);
-        setTotal(data.pagination.total);
+        setCurrentPage(data.pagination?.page || 1);
+        setTotalPages(data.pagination?.totalPages || 1);
+        setTotal(data.pagination?.total || 0);
       } catch (err) {
         console.error('메모 조회 오류:', err);
         setError(
@@ -379,7 +391,7 @@ export default function MemosPage() {
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">
                 {isSearchMode && searchQuery
-                  ? `"${searchQuery}" 검색 결과: ${searchResults.length}개`
+                  ? `"${searchQuery}" 검색 결과: ${(searchResults || []).length}개`
                   : `총 ${total}개의 메모`}
               </p>
             </div>
@@ -473,7 +485,7 @@ export default function MemosPage() {
         )}
 
         {/* 메모 목록 */}
-        {(isSearchMode ? searchResults : memos).length === 0 ? (
+        {((isSearchMode ? searchResults : memos) || []).length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 dark:text-gray-500 mb-4">
               <svg
@@ -509,7 +521,7 @@ export default function MemosPage() {
           <>
             {/* 메모 카드 목록 */}
             <div className="space-y-4 mb-8">
-              {(isSearchMode ? searchResults : memos).map(memo => (
+              {((isSearchMode ? searchResults : memos) || []).map(memo => (
                 <MemoCard
                   key={memo.id}
                   memo={memo}

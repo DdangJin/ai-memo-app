@@ -56,16 +56,20 @@ export const uuidParamSchema = z.object({
 export const paginationSchema = z.object({
   page: z
     .string()
+    .nullable()
     .optional()
     .transform(val => {
-      const parsed = parseInt(val || '1');
+      if (!val) return 1;
+      const parsed = parseInt(val);
       return isNaN(parsed) || parsed < 1 ? 1 : parsed;
     }),
   limit: z
     .string()
+    .nullable()
     .optional()
     .transform(val => {
-      const parsed = parseInt(val || '10');
+      if (!val) return 10;
+      const parsed = parseInt(val);
       return isNaN(parsed) || parsed < 1 || parsed > 50 ? 10 : parsed;
     }),
 });
