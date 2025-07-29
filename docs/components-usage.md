@@ -17,7 +17,7 @@ Memora 프로젝트의 UI 컴포넌트 사용법과 접근성 기능을 설명�
 
 전체 페이지 구조를 관리하는 메인 레이아웃 컴포넌트입니다.
 
-#### **기본 사용법**
+#### **Layout 기본 사용법**
 
 ```tsx
 import { Layout } from '@/components/ui';
@@ -40,7 +40,7 @@ export default function MyPage() {
 }
 ```
 
-#### **Props**
+#### **Layout Props**
 
 | Prop          | Type           | Default    | Description        |
 | ------------- | -------------- | ---------- | ------------------ |
@@ -52,7 +52,7 @@ export default function MyPage() {
 | `maxWidth`    | `string`       | `"full"`   | 컨테이너 최대 너비 |
 | `onSignOut`   | `function`     | -          | 로그아웃 핸들러    |
 
-#### **접근성 기능**
+#### **Layout 접근성 기능**
 
 - ✅ **시맨틱 HTML**: `<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>` 사용
 - ✅ **Landmark 역할**: 각 영역에 적절한 ARIA 역할 설정
@@ -63,7 +63,7 @@ export default function MyPage() {
 
 사이트 헤더와 메인 네비게이션을 담당하는 컴포넌트입니다.
 
-#### **기본 사용법**
+#### **Header 기본 사용법**
 
 ```tsx
 import { Header } from '@/components/ui';
@@ -77,7 +77,7 @@ import { Header } from '@/components/ui';
 />;
 ```
 
-#### **Props**
+#### **Header Props**
 
 | Prop                 | Type           | Default    | Description           |
 | -------------------- | -------------- | ---------- | --------------------- |
@@ -87,7 +87,7 @@ import { Header } from '@/components/ui';
 | `onMobileMenuToggle` | `function`     | -          | 모바일 메뉴 토글      |
 | `onSignOut`          | `function`     | -          | 로그아웃 핸들러       |
 
-#### **접근성 기능**
+#### **Header 접근성 기능**
 
 - ✅ **역할 속성**: `role="banner"` 설정
 - ✅ **ARIA 라벨**: 모든 버튼에 설명적 라벨
@@ -95,7 +95,7 @@ import { Header } from '@/components/ui';
 - ✅ **포커스 관리**: 시각적 포커스 표시
 - ✅ **사용자 메뉴**: Escape 키로 닫기, 외부 클릭 감지
 
-#### **키보드 단축키**
+#### **Header 키보드 단축키**
 
 - `Tab` / `Shift+Tab`: 요소 간 이동
 - `Enter` / `Space`: 버튼 활성화
@@ -105,7 +105,7 @@ import { Header } from '@/components/ui';
 
 네비게이션 메뉴를 관리하는 고급 컴포넌트입니다.
 
-#### **기본 사용법**
+#### **Navigation 기본 사용법**
 
 ```tsx
 import { Navigation } from '@/components/ui'
@@ -152,7 +152,7 @@ interface NavigationItem {
 }
 ```
 
-#### **Props**
+#### **Navigation Props**
 
 | Prop               | Type               | Default             | Description            |
 | ------------------ | ------------------ | ------------------- | ---------------------- |
@@ -162,7 +162,7 @@ interface NavigationItem {
 | `onItemClick`      | `function`         | -                   | 아이템 클릭 핸들러     |
 | `aria-label`       | `string`           | `"메인 네비게이션"` | ARIA 라벨              |
 
-#### **접근성 기능**
+#### **Navigation 접근성 기능**
 
 - ✅ **ARIA 역할**: `navigation`, `menubar`, `menu`, `menuitem`
 - ✅ **키보드 네비게이션**: 화살표 키로 이동
@@ -170,7 +170,7 @@ interface NavigationItem {
 - ✅ **포커스 트래핑**: 드롭다운 내 포커스 관리
 - ✅ **스크린 리더**: 구조적 정보 제공
 
-#### **키보드 단축키**
+#### **Navigation 키보드 단축키**
 
 - `ArrowDown` / `ArrowRight`: 다음 아이템으로 이동
 - `ArrowUp` / `ArrowLeft`: 이전 아이템으로 이동
