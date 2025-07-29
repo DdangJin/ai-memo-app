@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { eq, desc, sql } from 'drizzle-orm';
-import { db, memos } from '@/lib/db';
+import { db, memos, withRetry } from '@/lib/db';
 import {
   withAuth,
   createSuccessResponse,
@@ -77,35 +77,74 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
       });
     }
 
+    // Stop word 여부 확인 (PostgreSQL에서 직접 체크)
+    let isStopWordQuery = false;
+    try {
+      const stopWordCheck = await withRetry(() =>
+        db.execute(
+          sql`SELECT to_tsquery('english', ${processedQuery}) as result`
+        )
+      );
+      const tsqueryResult = stopWordCheck[0]?.result;
+      // to_tsquery 결과가 null이거나 빈 문자열이면 stop word
+      isStopWordQuery =
+        !tsqueryResult || tsqueryResult.toString().trim() === '';
+    } catch (checkError) {
+      // 에러가 발생하면 stop word일 가능성이 높음
+      isStopWordQuery = true;
+    }
+
+    // Stop word인 경우 바로 빈 결과 반환
+    if (isStopWordQuery) {
+      return createSuccessResponse({
+        memos: [],
+        query,
+        isStopWordQuery: true,
+        stopWordMessage:
+          '검색하신 단어는 일반적인 단어로 검색에서 제외됩니다. 더 구체적인 키워드를 사용해보세요.',
+        pagination: {
+          page,
+          limit,
+          total: 0,
+          totalPages: 0,
+        },
+      });
+    }
+
     // PostgreSQL 전문 검색 쿼리 실행
     // fts 컬럼을 사용하여 검색하고 사용자 필터링 적용
-    const searchResults = await db
-      .select()
-      .from(memos)
-      .where(
-        sql`${memos.userId} = ${req.user.id} AND ${memos.fts} @@ to_tsquery('english', ${processedQuery})`
-      )
-      .orderBy(
-        // 관련성 순으로 정렬 (ts_rank_cd 사용)
-        sql`ts_rank_cd(${memos.fts}, to_tsquery('english', ${processedQuery})) DESC`,
-        desc(memos.createdAt)
-      )
-      .limit(limit)
-      .offset(offset);
+    const searchResults = await withRetry(() =>
+      db
+        .select()
+        .from(memos)
+        .where(
+          sql`${memos.userId} = ${req.user.id} AND ${memos.fts} @@ to_tsquery('english', ${processedQuery})`
+        )
+        .orderBy(
+          // 관련성 순으로 정렬 (ts_rank_cd 사용)
+          sql`ts_rank_cd(${memos.fts}, to_tsquery('english', ${processedQuery})) DESC`,
+          desc(memos.createdAt)
+        )
+        .limit(limit)
+        .offset(offset)
+    );
 
     // 총 검색 결과 개수 조회
-    const countResult = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(memos)
-      .where(
-        sql`${memos.userId} = ${req.user.id} AND ${memos.fts} @@ to_tsquery('english', ${processedQuery})`
-      );
+    const countResult = await withRetry(() =>
+      db
+        .select({ count: sql<number>`count(*)` })
+        .from(memos)
+        .where(
+          sql`${memos.userId} = ${req.user.id} AND ${memos.fts} @@ to_tsquery('english', ${processedQuery})`
+        )
+    );
 
     const total = countResult[0]?.count || 0;
 
     return createSuccessResponse({
       memos: searchResults,
       query,
+      isStopWordQuery: false, // 정상 검색인 경우
       pagination: {
         page,
         limit,
