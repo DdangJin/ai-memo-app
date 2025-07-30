@@ -272,6 +272,11 @@ export default function MemosPage() {
     }
   }, [user, fetchMemos]);
 
+  // 페이지 제목 설정
+  useEffect(() => {
+    document.title = `내 메모 - Memora`;
+  }, []);
+
   // 페이지 변경 핸들러 (useCallback으로 최적화)
   const handlePageChange = useCallback(
     (page: number) => {
@@ -415,7 +420,7 @@ export default function MemosPage() {
   // 로딩 상태
   if (authLoading || (loading && memos.length === 0)) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <main className="flex-1">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="animate-pulse">
             <div className="h-8 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl w-1/4 mb-8"></div>
@@ -432,7 +437,7 @@ export default function MemosPage() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -442,7 +447,7 @@ export default function MemosPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <main className="flex-1">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* 헤더 */}
         <div className="flex flex-col space-y-6 mb-8">
@@ -651,6 +656,6 @@ export default function MemosPage() {
           </>
         )}
       </div>
-    </div>
+    </main>
   );
 }
