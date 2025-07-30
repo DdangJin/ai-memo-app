@@ -124,7 +124,10 @@ export default function Layout({
   };
 
   return (
-    <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900', className)}>
+    <div className={cn('min-h-screen relative', className)}>
+      {/* 배경 그라데이션 */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 -z-10"></div>
+
       {/* Header */}
       <Header
         title={title}
@@ -136,14 +139,14 @@ export default function Layout({
       />
 
       {/* 메인 레이아웃 */}
-      <div className="flex min-h-[calc(100vh-4rem)]">
+      <div className="flex min-h-[calc(100vh-5rem)]">
         {/* 사이드바 (데스크톱) */}
         {showSidebar && (
           <aside
             className="hidden lg:flex lg:w-64 lg:flex-col"
             aria-label="사이드바"
           >
-            <div className="flex flex-col flex-1 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col flex-1 bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border-r border-white/20 dark:border-slate-700/30 shadow-lg">
               {/* 사이드바 네비게이션 */}
               {navItems.length > 0 && (
                 <nav className="flex-1 px-4 py-6 space-y-1">
@@ -158,7 +161,7 @@ export default function Layout({
 
               {/* 사이드바 콘텐츠 */}
               {sidebar && (
-                <div className="flex-shrink-0 px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex-shrink-0 px-4 py-4 border-t border-white/20 dark:border-slate-700/30">
                   {sidebar}
                 </div>
               )}
@@ -175,10 +178,10 @@ export default function Layout({
             aria-label="모바일 메뉴"
           >
             <div
-              className="fixed inset-0 bg-black bg-opacity-25"
+              className="fixed inset-0 bg-black/25 backdrop-blur-sm"
               onClick={handleMobileMenuClose}
             />
-            <div className="fixed top-16 left-0 bottom-0 w-80 max-w-xs bg-white dark:bg-gray-800 shadow-xl overflow-y-auto">
+            <div className="fixed top-20 left-0 bottom-0 w-80 max-w-xs bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-r border-white/20 dark:border-slate-700/30 shadow-2xl overflow-y-auto">
               <nav className="px-4 py-6">
                 <Navigation
                   items={navItems}
@@ -212,7 +215,7 @@ export default function Layout({
           {showFooter && (
             <footer
               className={cn(
-                'border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800',
+                'border-t border-white/20 dark:border-slate-700/30 bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl',
                 padding && 'px-4 py-6 sm:px-6 lg:px-8'
               )}
               role="contentinfo"
@@ -228,26 +231,26 @@ export default function Layout({
                       >
                         📝
                       </span>
-                      <span className="text-gray-600 dark:text-gray-400">
+                      <span className="text-slate-600 dark:text-slate-400">
                         © 2024 {title}. All rights reserved.
                       </span>
                     </div>
-                    <div className="flex space-x-6 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex space-x-6 text-sm text-slate-500 dark:text-slate-400">
                       <a
                         href="/privacy"
-                        className="hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="hover:text-slate-700 dark:hover:text-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-500/25 rounded-lg px-2 py-1 transition-all duration-200"
                       >
                         개인정보처리방침
                       </a>
                       <a
                         href="/terms"
-                        className="hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="hover:text-slate-700 dark:hover:text-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-500/25 rounded-lg px-2 py-1 transition-all duration-200"
                       >
                         이용약관
                       </a>
                       <a
                         href="/support"
-                        className="hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="hover:text-slate-700 dark:hover:text-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-500/25 rounded-lg px-2 py-1 transition-all duration-200"
                       >
                         고객지원
                       </a>
