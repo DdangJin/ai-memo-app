@@ -66,11 +66,11 @@ const MemoCard = memo(
     return (
       <Link
         href={`/memos/${memo.id}`}
-        className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700"
+        className="block backdrop-blur-glass rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20 dark:border-slate-700/50 card-hover group"
       >
         <div className="p-6">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-1">
+          <div className="flex justify-between items-start mb-4">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {searchTerms.length > 0 ? (
                 <TextHighlight text={memo.title} searchTerms={searchTerms} />
               ) : (
@@ -79,32 +79,38 @@ const MemoCard = memo(
             </h3>
             <div className="flex items-center space-x-2 ml-4">
               {memo.isFavorite && (
-                <span className="text-yellow-500" aria-label="즐겨찾기">
+                <div
+                  className="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg shadow-md"
+                  aria-label="즐겨찾기"
+                >
                   <svg
-                    className="w-4 h-4"
+                    className="w-4 h-4 text-white"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
-                </span>
+                </div>
               )}
               {memo.voiceUrl && (
-                <span className="text-blue-500" aria-label="음성 메모">
+                <div
+                  className="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-md"
+                  aria-label="음성 메모"
+                >
                   <svg
-                    className="w-4 h-4"
+                    className="w-4 h-4 text-white"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
                     <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
                     <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                   </svg>
-                </span>
+                </div>
               )}
             </div>
           </div>
           {memo.content && (
-            <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
+            <p className="text-slate-600 dark:text-slate-300 text-sm line-clamp-2 mb-4 leading-relaxed">
               {searchTerms.length > 0 ? (
                 <TextHighlight text={memo.content} searchTerms={searchTerms} />
               ) : (
@@ -112,9 +118,41 @@ const MemoCard = memo(
               )}
             </p>
           )}
-          <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-            <span>생성: {formattedCreatedAt}</span>
-            {formattedUpdatedAt && <span>수정: {formattedUpdatedAt}</span>}
+          <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex items-center">
+              <svg
+                className="w-3 h-3 mr-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{formattedCreatedAt}</span>
+            </div>
+            {formattedUpdatedAt && (
+              <div className="flex items-center">
+                <svg
+                  className="w-3 h-3 mr-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                <span>{formattedUpdatedAt}</span>
+              </div>
+            )}
           </div>
         </div>
       </Link>
@@ -298,10 +336,22 @@ export default function MemosPage() {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1 || loading}
-          className="px-3 py-2 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="px-4 py-2 rounded-xl backdrop-blur-glass border border-white/20 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 hover:bg-white/30 dark:hover:bg-slate-800/50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
           aria-label="이전 페이지"
         >
-          이전
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
         </button>
 
         {/* 페이지 번호 */}
@@ -317,10 +367,10 @@ export default function MemosPage() {
                 key={page}
                 onClick={() => handlePageChange(page)}
                 disabled={loading}
-                className={`px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                className={`px-4 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 ${
                   page === currentPage
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+                    : 'backdrop-blur-glass border border-white/20 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 hover:bg-white/30 dark:hover:bg-slate-800/50'
                 } disabled:cursor-not-allowed`}
                 aria-label={`${page}페이지로 이동`}
                 aria-current={page === currentPage ? 'page' : undefined}
@@ -330,7 +380,7 @@ export default function MemosPage() {
             );
           } else if (page === currentPage - 3 || page === currentPage + 3) {
             return (
-              <span key={page} className="px-2 text-gray-500">
+              <span key={page} className="px-2 text-slate-500">
                 ...
               </span>
             );
@@ -341,10 +391,22 @@ export default function MemosPage() {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages || loading}
-          className="px-3 py-2 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="px-4 py-2 rounded-xl backdrop-blur-glass border border-white/20 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 hover:bg-white/30 dark:hover:bg-slate-800/50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
           aria-label="다음 페이지"
         >
-          다음
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
         </button>
       </nav>
     );
@@ -353,18 +415,18 @@ export default function MemosPage() {
   // 로딩 상태
   if (authLoading || (loading && memos.length === 0)) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div>
-            <div className="space-y-4">
+            <div className="h-8 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl w-1/4 mb-8"></div>
+            <div className="space-y-6">
               {[1, 2, 3, 4, 5].map(i => (
                 <div
                   key={i}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow p-4"
+                  className="backdrop-blur-glass rounded-2xl border border-white/20 dark:border-slate-700/50 p-6"
                 >
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  <div className="h-5 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-lg w-3/4 mb-3"></div>
+                  <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-lg w-1/2"></div>
                 </div>
               ))}
             </div>
@@ -380,16 +442,16 @@ export default function MemosPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* 헤더 */}
-        <div className="flex flex-col space-y-4 mb-8">
+        <div className="flex flex-col space-y-6 mb-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent mb-2">
                 내 메모
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-slate-600 dark:text-slate-400 text-lg">
                 {isSearchMode && searchQuery
                   ? `"${searchQuery}" 검색 결과: ${(searchResults || []).length}개`
                   : `총 ${total}개의 메모`}
@@ -397,99 +459,10 @@ export default function MemosPage() {
             </div>
             <Link
               href="/memos/new"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg hover:shadow-xl transition-all duration-200 btn-active"
             >
-              새 메모 작성
-            </Link>
-          </div>
-
-          {/* 검색 입력 */}
-          <SearchInput
-            onResults={handleSearchResults}
-            onError={handleSearchError}
-            className="max-w-md"
-          />
-
-          {/* 정렬 컨트롤 - 검색 모드가 아닐 때만 표시 */}
-          {!isSearchMode && (
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                정렬:
-              </span>
-              <div
-                className="flex flex-wrap gap-2"
-                role="group"
-                aria-label="메모 정렬 옵션"
-              >
-                <button
-                  onClick={() => handleSortChange('createdAt')}
-                  className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    sortBy === 'createdAt'
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  }`}
-                  aria-pressed={sortBy === 'createdAt'}
-                  aria-label={`생성일순 정렬 ${sortBy === 'createdAt' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
-                >
-                  생성일
-                  {sortBy === 'createdAt' && (
-                    <span className="ml-1" aria-hidden="true">
-                      {sortOrder === 'desc' ? '↓' : '↑'}
-                    </span>
-                  )}
-                </button>
-                <button
-                  onClick={() => handleSortChange('updatedAt')}
-                  className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    sortBy === 'updatedAt'
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  }`}
-                  aria-pressed={sortBy === 'updatedAt'}
-                  aria-label={`수정일순 정렬 ${sortBy === 'updatedAt' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
-                >
-                  수정일
-                  {sortBy === 'updatedAt' && (
-                    <span className="ml-1" aria-hidden="true">
-                      {sortOrder === 'desc' ? '↓' : '↑'}
-                    </span>
-                  )}
-                </button>
-                <button
-                  onClick={() => handleSortChange('title')}
-                  className={`px-3 py-1 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    sortBy === 'title'
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  }`}
-                  aria-pressed={sortBy === 'title'}
-                  aria-label={`제목순 정렬 ${sortBy === 'title' ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
-                >
-                  제목
-                  {sortBy === 'title' && (
-                    <span className="ml-1" aria-hidden="true">
-                      {sortOrder === 'desc' ? '↓' : '↑'}
-                    </span>
-                  )}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 에러 상태 */}
-        {(error || searchError) && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6">
-            {error || searchError}
-          </div>
-        )}
-
-        {/* 메모 목록 */}
-        {((isSearchMode ? searchResults : memos) || []).length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400 dark:text-gray-500 mb-4">
               <svg
-                className="mx-auto h-12 w-12"
+                className="w-5 h-5 mr-2"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -498,29 +471,172 @@ export default function MemosPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  d="M12 4v16m8-8H4"
                 />
               </svg>
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              {isSearchMode ? '검색 결과가 없습니다' : '메모가 없습니다'}
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-4">
-              {isSearchMode
-                ? '다른 검색어로 시도해보세요.'
-                : '첫 번째 메모를 작성해보세요!'}
-            </p>
-            <Link
-              href="/memos/new"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              메모 작성하기
+              새 메모 작성
             </Link>
+          </div>
+
+          {/* 검색 입력 */}
+          <div className="backdrop-blur-glass rounded-2xl border border-white/20 dark:border-slate-700/50 p-4">
+            <SearchInput
+              onResults={handleSearchResults}
+              onError={handleSearchError}
+              className="max-w-md"
+            />
+          </div>
+
+          {/* 정렬 컨트롤 - 검색 모드가 아닐 때만 표시 */}
+          {!isSearchMode && (
+            <div className="backdrop-blur-glass rounded-2xl border border-white/20 dark:border-slate-700/50 p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  정렬:
+                </span>
+                <div
+                  className="flex flex-wrap gap-2"
+                  role="group"
+                  aria-label="메모 정렬 옵션"
+                >
+                  {[
+                    { key: 'createdAt', label: '생성일' },
+                    { key: 'updatedAt', label: '수정일' },
+                    { key: 'title', label: '제목' },
+                  ].map(({ key, label }) => (
+                    <button
+                      key={key}
+                      onClick={() =>
+                        handleSortChange(
+                          key as 'createdAt' | 'updatedAt' | 'title'
+                        )
+                      }
+                      className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                        sortBy === key
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+                          : 'bg-white/50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-800/70'
+                      }`}
+                      aria-pressed={sortBy === key}
+                      aria-label={`${label}순 정렬 ${sortBy === key ? (sortOrder === 'desc' ? '내림차순' : '올림차순') : ''}`}
+                    >
+                      {label}
+                      {sortBy === key && (
+                        <span className="ml-2" aria-hidden="true">
+                          {sortOrder === 'desc' ? (
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 15l7-7 7 7"
+                              />
+                            </svg>
+                          )}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 에러 상태 */}
+        {(error || searchError) && (
+          <div className="bg-red-50/90 dark:bg-red-900/30 backdrop-blur-sm border border-red-200 dark:border-red-800 rounded-2xl p-4 mb-8">
+            <div className="flex items-center">
+              <svg
+                className="w-5 h-5 text-red-500 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-red-600 dark:text-red-400 font-medium">
+                {error || searchError}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* 메모 목록 */}
+        {((isSearchMode ? searchResults : memos) || []).length === 0 ? (
+          <div className="text-center py-16">
+            <div className="backdrop-blur-glass rounded-3xl border border-white/20 dark:border-slate-700/50 p-12">
+              <div className="flex items-center justify-center w-20 h-20 bg-gradient-to-tr from-slate-400 to-slate-500 rounded-2xl mx-auto mb-6">
+                <svg
+                  className="w-10 h-10 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                {isSearchMode ? '검색 결과가 없습니다' : '메모가 없습니다'}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-8 text-lg">
+                {isSearchMode
+                  ? '다른 검색어로 시도해보세요.'
+                  : '첫 번째 메모를 작성해보세요!'}
+              </p>
+              <Link
+                href="/memos/new"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg hover:shadow-xl transition-all duration-200 btn-active"
+              >
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                메모 작성하기
+              </Link>
+            </div>
           </div>
         ) : (
           <>
             {/* 메모 카드 목록 */}
-            <div className="space-y-4 mb-8">
+            <div className="grid gap-6 mb-8">
               {((isSearchMode ? searchResults : memos) || []).map(memo => (
                 <MemoCard
                   key={memo.id}
