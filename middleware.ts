@@ -2,6 +2,9 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
+  // CSP nonce 생성 (Context7 베스트 프랙티스)
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -51,6 +54,40 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
+  }
+
+  // 추가 보안 헤더 적용 (Context7 OWASP 권장사항)
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-nonce', nonce);
+
+  // 동적 CSP 헤더 설정 (nonce 기반)
+  const cspHeader = [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline'`,
+    "img-src 'self' data: https:",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "media-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    'upgrade-insecure-requests',
+  ].join('; ');
+
+  supabaseResponse.headers.set('Content-Security-Policy', cspHeader);
+  supabaseResponse.headers.set('x-nonce', nonce);
+
+  // 추가 보안 헤더 (API 보호)
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff');
+    supabaseResponse.headers.set('X-Frame-Options', 'DENY');
+    supabaseResponse.headers.set(
+      'Referrer-Policy',
+      'strict-origin-when-cross-origin'
+    );
+    supabaseResponse.headers.set('X-DNS-Prefetch-Control', 'off');
   }
 
   return supabaseResponse;

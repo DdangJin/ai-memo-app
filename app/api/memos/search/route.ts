@@ -141,8 +141,16 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
 
     const total = countResult[0]?.count || 0;
 
+    // 요약 상태 정보 추가
+    const searchResultsWithSummaryInfo = searchResults.map(memo => ({
+      ...memo,
+      hasSummary: !!memo.aiSummary,
+      summaryLength: memo.aiSummary ? memo.aiSummary.length : 0,
+      canSummarize: !!memo.content && memo.content.trim().length > 0,
+    }));
+
     return createSuccessResponse({
-      memos: searchResults,
+      memos: searchResultsWithSummaryInfo,
       query,
       isStopWordQuery: false, // 정상 검색인 경우
       pagination: {

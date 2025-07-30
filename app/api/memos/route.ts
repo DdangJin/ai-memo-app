@@ -53,8 +53,16 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
 
     const total = totalResult.length;
 
+    // 요약 상태 정보 추가
+    const memosWithSummaryInfo = userMemos.map(memo => ({
+      ...memo,
+      hasSummary: !!memo.aiSummary,
+      summaryLength: memo.aiSummary ? memo.aiSummary.length : 0,
+      canSummarize: !!memo.content && memo.content.trim().length > 0,
+    }));
+
     return createSuccessResponse({
-      memos: userMemos,
+      memos: memosWithSummaryInfo,
       pagination: {
         page,
         limit,

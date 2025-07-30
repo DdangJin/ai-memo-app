@@ -73,7 +73,15 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       return createUnauthorizedResponse();
     }
 
-    return createSuccessResponse(memo);
+    // 요약 상태 정보 추가
+    const memoWithSummaryInfo = {
+      ...memo,
+      hasSummary: !!memo.aiSummary,
+      summaryLength: memo.aiSummary ? memo.aiSummary.length : 0,
+      canSummarize: !!memo.content && memo.content.trim().length > 0,
+    };
+
+    return createSuccessResponse(memoWithSummaryInfo);
   } catch (error) {
     console.error('메모 조회 오류:', error);
     return createBadRequestResponse('메모를 조회하는 중 오류가 발생했습니다.');
