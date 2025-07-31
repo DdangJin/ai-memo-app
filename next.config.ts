@@ -69,11 +69,16 @@ const nextConfig: NextConfig = {
             key: 'X-DNS-Prefetch-Control',
             value: 'off',
           },
-          // 권한 정책 (민감한 API 차단)
+          // Context7 베스트 프랙티스: 마이크 권한 허용 (음성 인식 기능을 위해)
           {
             key: 'Permissions-Policy',
             value:
-              'camera=(), microphone=(), geolocation=(), browsing-topics=()',
+              'camera=(), microphone=*, geolocation=(), browsing-topics=()',
+          },
+          // Context7 베스트 프랙티스: 레거시 브라우저 지원을 위한 Feature-Policy
+          {
+            key: 'Feature-Policy',
+            value: 'microphone *; camera "none"; geolocation "none"',
           },
         ],
       },
