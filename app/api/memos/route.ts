@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { eq, desc } from 'drizzle-orm';
 import { db, memos, NewMemo } from '@/lib/db';
 import {
@@ -22,17 +21,31 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
   try {
     const { searchParams } = new URL(req.url);
 
+    // Context7 베스트 프랙티스: 상세한 디버깅 로그
+    console.log('DEBUG: API 요청 URL:', req.url);
+    console.log('DEBUG: searchParams toString:', searchParams.toString());
+    console.log('DEBUG: page param:', searchParams.get('page'));
+    console.log('DEBUG: limit param:', searchParams.get('limit'));
+
     // 쿼리 매개변수 검증
     const queryValidation = paginationSchema.safeParse({
       page: searchParams.get('page'),
       limit: searchParams.get('limit'),
     });
 
+    console.log('DEBUG: queryValidation.success:', queryValidation.success);
+
     if (!queryValidation.success) {
+      console.error(
+        'DEBUG: queryValidation.error:',
+        JSON.stringify(queryValidation.error.issues, null, 2)
+      );
       return createBadRequestResponse(
         formatValidationErrors(queryValidation.error)
       );
     }
+
+    console.log('DEBUG: validated data:', queryValidation.data);
 
     const { page, limit } = queryValidation.data;
     const offset = (page - 1) * limit;
@@ -72,6 +85,12 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
       },
     });
   } catch (error) {
+    // Context7 베스트 프랙티스: 상세한 에러 로깅
+    console.error('DEBUG: GET /api/memos caught error:', error);
+    if (error instanceof Error) {
+      console.error('DEBUG: Error message:', error.message);
+      console.error('DEBUG: Error stack:', error.stack);
+    }
     return createBadRequestResponse('메모를 조회하는 중 오류가 발생했습니다.');
   }
 });

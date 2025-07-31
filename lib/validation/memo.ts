@@ -52,26 +52,35 @@ export const uuidParamSchema = z.object({
 
 /**
  * 페이지네이션 쿼리 매개변수 검증 스키마
+ * Context7 베스트 프랙티스: robust input validation with preprocess
  */
 export const paginationSchema = z.object({
-  page: z
-    .string()
-    .nullable()
-    .optional()
-    .transform(val => {
-      if (!val) return 1;
-      const parsed = parseInt(val);
-      return isNaN(parsed) || parsed < 1 ? 1 : parsed;
-    }),
-  limit: z
-    .string()
-    .nullable()
-    .optional()
-    .transform(val => {
-      if (!val) return 10;
-      const parsed = parseInt(val);
-      return isNaN(parsed) || parsed < 1 || parsed > 50 ? 10 : parsed;
-    }),
+  page: z.preprocess(
+    val => {
+      // null, undefined, 빈 문자열 처리
+      if (val === null || val === undefined || val === '') return 1;
+      // 숫자 문자열 변환
+      const parsed = Number(val);
+      return isNaN(parsed) || parsed < 1 ? 1 : Math.floor(parsed);
+    },
+    z.number().int().min(1, '페이지는 1 이상이어야 합니다.')
+  ),
+  limit: z.preprocess(
+    val => {
+      // null, undefined, 빈 문자열 처리
+      if (val === null || val === undefined || val === '') return 10;
+      // 숫자 문자열 변환
+      const parsed = Number(val);
+      return isNaN(parsed) || parsed < 1 || parsed > 50
+        ? 10
+        : Math.floor(parsed);
+    },
+    z
+      .number()
+      .int()
+      .min(1, '리밋은 1 이상이어야 합니다.')
+      .max(50, '리밋은 50 이하여야 합니다.')
+  ),
 });
 
 // 타입 추론

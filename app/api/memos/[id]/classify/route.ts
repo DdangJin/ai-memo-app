@@ -8,10 +8,10 @@ import { classifyMemo } from '@/lib/anthropic';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const memoId = params.id;
+    const { id: memoId } = await params;
     if (!memoId || typeof memoId !== 'string') {
       return NextResponse.json({ error: 'Invalid memo ID' }, { status: 400 });
     }
@@ -140,10 +140,10 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const memoId = params.id;
+    const { id: memoId } = await params;
     if (!memoId || typeof memoId !== 'string') {
       return NextResponse.json({ error: 'Invalid memo ID' }, { status: 400 });
     }

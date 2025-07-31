@@ -50,6 +50,30 @@ body {
   background: linear-gradient(45deg, #4f46e5, #7c3aed);
 }
 
+/* Context7 AI 처리 애니메이션 */
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* AI 처리 펄스 효과 */
+@keyframes ai-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 /* 부드러운 애니메이션을 위한 기본 전환 효과 */
 * {
   transition-property:
