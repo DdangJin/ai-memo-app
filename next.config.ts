@@ -72,13 +72,12 @@ const nextConfig: NextConfig = {
           // Context7 베스트 프랙티스: 마이크 권한 허용 (음성 인식 기능을 위해)
           {
             key: 'Permissions-Policy',
-            value:
-              'camera=(), microphone=*, geolocation=(), browsing-topics=()',
+            value: 'microphone=*',
           },
           // Context7 베스트 프랙티스: 레거시 브라우저 지원을 위한 Feature-Policy
           {
             key: 'Feature-Policy',
-            value: 'microphone *; camera "none"; geolocation "none"',
+            value: 'microphone *',
           },
         ],
       },
