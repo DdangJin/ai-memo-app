@@ -133,6 +133,8 @@ export const memos = pgTable('memos', {
   categoryId: uuid('category_id').references(() => categories.id, {
     onDelete: 'set null',
   }),
+  // AI 자동 분류를 위한 카테고리 필드 (Context7 베스트 프랙티스)
+  category: text('category'),
   isArchived: boolean('is_archived').default(false),
   isFavorite: boolean('is_favorite').default(false),
   aiSummary: text('ai_summary'),

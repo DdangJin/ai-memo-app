@@ -6,28 +6,35 @@ const nextConfig: NextConfig = {
 
   // 보안 헤더 설정 (Context7 OWASP 베스트 프랙티스)
   async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          // Content Security Policy - XSS 방지
+    const isDevelopment = process.env.NODE_ENV === 'development';
+
+    // 개발 환경에서는 CSP를 비활성화하여 개발 도구와 호환성 확보
+    const cspHeaders = isDevelopment
+      ? []
+      : [
           {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https:",
-              "font-src 'self'",
-              "connect-src 'self'",
+              "img-src 'self' data: https: blob:",
+              "font-src 'self' data:",
+              "connect-src 'self' ws: wss:",
               "media-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'none'",
-              'upgrade-insecure-requests',
             ].join('; '),
           },
+        ];
+
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          ...cspHeaders,
           // MIME 타입 스니핑 방지
           {
             key: 'X-Content-Type-Options',

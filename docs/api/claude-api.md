@@ -7,7 +7,7 @@ AI 메모 앱에서 Anthropic Claude API를 사용하여 메모 요약 및 분�
 Claude API는 다음과 같은 AI 기능을 제공합니다:
 
 - **메모 요약**: 긴 메모 내용을 간결하게 요약
-- **메모 분류**: 메모를 카테고리별로 자동 분류
+- **메모 분류**: 메모를 카테고리별로 자동 분류 (10개 카테고리 지원)
 - **일반 AI 메시지**: 자유로운 형태의 AI 대화
 
 ## 환경 설정
@@ -84,7 +84,74 @@ Authorization: Bearer <your-token>
 }
 ```
 
-### 2. 일반 메시지 (`/api/claude/message`)
+### 2. 메모 분류 (`/api/memos/[id]/classify`)
+
+메모 내용을 자동으로 분석하여 카테고리를 분류하고 데이터베이스에 저장합니다.
+
+**POST 요청 - 메모 분류 실행:**
+
+```typescript
+POST /api/memos/[id]/classify
+Authorization: Bearer <your-token>
+
+// 요청 본문: 없음 (메모 ID는 URL에서 추출)
+```
+
+**응답:**
+
+```typescript
+{
+  "success": true,
+  "classification": {
+    "category": "work",
+    "categoryKo": "업무",
+    "confidence": 0.92,
+    "reasoning": "프로젝트 진행 상황과 업무 관련 내용이 포함되어 있어 업무 카테고리로 분류했습니다."
+  },
+  "memoId": 123
+}
+```
+
+**GET 요청 - 분류 상태 조회:**
+
+```typescript
+GET /api/memos/[id]/classify
+Authorization: Bearer <your-token>
+```
+
+**응답:**
+
+```typescript
+{
+  "success": true,
+  "category": "work",
+  "hasClassification": true
+}
+```
+
+**지원 카테고리:**
+
+| 카테고리   | 한국어   | 설명                            |
+| ---------- | -------- | ------------------------------- |
+| `work`     | 업무     | 직장, 프로젝트, 업무 관련 내용  |
+| `personal` | 개인     | 개인적인 일상, 생각, 경험       |
+| `study`    | 학습     | 공부, 연구, 교육 관련 내용      |
+| `idea`     | 아이디어 | 창의적 아이디어, 발상, 영감     |
+| `todo`     | 할일     | 해야 할 일, 계획, 일정          |
+| `meeting`  | 회의     | 회의 내용, 논의 사항, 결정 사항 |
+| `finance`  | 재정     | 금융, 예산, 투자, 지출 관련     |
+| `health`   | 건강     | 건강, 운동, 의료 관련 내용      |
+| `travel`   | 여행     | 여행 계획, 기록, 경험           |
+| `other`    | 기타     | 위 카테고리에 속하지 않는 내용  |
+
+**자동 분류 기능:**
+
+- 새 메모 생성 시 자동으로 분류 실행
+- 메모 내용 업데이트 시 자동으로 재분류
+- 백그라운드에서 처리되어 응답 지연 없음
+- 분류 실패 시 'other' 카테고리로 기본 설정
+
+### 3. 일반 메시지 (`/api/claude/message`)
 
 일반적인 Claude AI 메시지를 처리합니다.
 

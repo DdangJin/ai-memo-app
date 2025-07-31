@@ -622,7 +622,7 @@
         "description": "Develop a feature that automatically classifies memos into categories based on their content using the Anthropic Claude API and an AI-driven classification algorithm.",
         "details": "1. Design and implement a backend API endpoint (e.g., POST /api/memos/:id/classify-category) that receives a memo ID, retrieves the memo content from the database, and sends it to the Claude API for category classification.\n2. Define a set of supported categories (e.g., Work, Personal, Ideas, Tasks, etc.) and ensure these are clearly communicated to the model in the prompt. Construct prompts that instruct Claude to analyze the memo content and return the most appropriate category from the predefined list. For example: 'Classify the following memo into one of these categories: [Work, Personal, Ideas, Tasks, Other]. Only return the category name.'\n3. Use the Claude Messages API for interaction, following best practices for prompt design and handling conversational turns if needed[2][3][4].\n4. Parse and validate the model's response to ensure it matches one of the allowed categories. If the response is ambiguous or does not match, implement fallback logic (e.g., default to 'Other' or request clarification).\n5. Update the memo's category field in the database upon successful classification.\n6. Ensure the classification process is triggered automatically upon memo creation or update, and provide a manual re-classification option in the UI if required.\n7. Log classification results and errors for monitoring and future prompt refinement.\n8. Consider edge cases such as empty memos, very short or very long content, and memos that do not fit any category well.",
         "testStrategy": "- Create memos with diverse content representing each category and verify that the classification matches expectations.\n- Test with ambiguous, multi-topic, or edge-case memos to ensure the system handles uncertainty gracefully (e.g., defaults to 'Other' or requests clarification).\n- Confirm that the backend endpoint correctly retrieves memo content, sends the prompt to Claude, parses the response, and updates the database.\n- Simulate API failures or invalid responses from Claude and verify robust error handling and logging.\n- Check that classification is triggered both automatically (on create/update) and manually (via UI), and that the UI reflects the assigned category.\n- Review logs to ensure all classification attempts and errors are recorded for future analysis.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           5,
           8
@@ -634,8 +634,8 @@
             "title": "Design and Implement Category Classification API Endpoint",
             "description": "Create a backend API endpoint (e.g., POST /api/memos/:id/classify-category) that receives a memo ID, retrieves the memo content from the database, and prepares it for classification.",
             "dependencies": [],
-            "details": "Ensure the endpoint securely fetches memo content and is structured to support asynchronous AI classification requests.",
-            "status": "pending",
+            "details": "Ensure the endpoint securely fetches memo content and is structured to support asynchronous AI classification requests.\n<info added on 2025-07-31T16:24:40.266Z>\nAPI 엔드포인트 구현이 완료되었습니다. 구현 과정에서 다음과 같은 타입 관련 이슈들이 발견되었습니다:\n\n1. 메모 ID 타입 불일치: 코드에서는 integer로 처리되고 있으나 데이터베이스 스키마는 UUID string을 기대함\n2. 데이터베이스 스키마 불일치: memos 테이블에 category 필드가 누락되어 있고 categoryId만 존재함\n3. Next.js cookies() 함수 사용 시 await 키워드 누락\n4. Anthropic API 도구 스키마에서 타입 정의 오류 발생\n\n이러한 타입 오류들을 수정하여 분류 API의 안정성과 정확성을 확보할 예정입니다.\n</info added on 2025-07-31T16:24:40.266Z>",
+            "status": "done",
             "testStrategy": "Send requests with valid and invalid memo IDs; verify correct retrieval and error handling."
           },
           {
@@ -646,7 +646,7 @@
               "10.1"
             ],
             "details": "Document category definitions and ensure prompt templates explicitly list categories and instruct Claude to return only the category name.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Review prompt outputs for various memo samples to confirm category clarity and prompt effectiveness."
           },
           {
@@ -657,7 +657,7 @@
               "10.2"
             ],
             "details": "Follow best practices for Claude API usage, including message formatting, error handling, and retry logic for resilience[1][2][3].",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Trigger classification for memos of varying lengths and complexities; verify API responses and error handling."
           },
           {
@@ -668,7 +668,7 @@
               "10.3"
             ],
             "details": "If the response is not a valid category, default to 'Other' or request clarification. Update the memo's category field in the database upon successful classification.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with edge cases (empty, ambiguous, or multi-topic memos) and verify correct fallback or clarification behavior."
           },
           {
@@ -679,7 +679,7 @@
               "10.4"
             ],
             "details": "Integrate classification triggers into memo lifecycle events and implement comprehensive logging for audit and improvement.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create, update, and manually re-classify memos; verify automation, logging, and error monitoring."
           }
         ]
@@ -1852,7 +1852,7 @@
     ],
     "metadata": {
       "created": "2025-07-28T04:59:55.287Z",
-      "updated": "2025-07-30T01:49:16.347Z",
+      "updated": "2025-07-31T16:26:57.175Z",
       "description": "Tasks for master context"
     }
   }

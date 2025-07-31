@@ -14,6 +14,7 @@ import {
   uuidParamSchema,
   formatValidationErrors,
 } from '@/lib/validation/memo';
+import { classifyMemo } from '@/lib/anthropic';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -154,7 +155,55 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       .where(eq(memos.id, id))
       .returning();
 
-    return createSuccessResponse(updatedMemo);
+    // Context7 베스트 프랙티스: 내용이 변경된 경우 자동 재분류 (비동기)
+    // 기존 내용과 다르고, 내용이 비어있지 않은 경우에만 실행
+    if (
+      content !== undefined &&
+      updatedMemo.content &&
+      updatedMemo.content.trim().length > 0 &&
+      updatedMemo.content !== existingMemo.content
+    ) {
+      // 자동 재분류를 백그라운드에서 실행
+      classifyMemo(updatedMemo.content)
+        .then(async classification => {
+          try {
+            await db
+              .update(memos)
+              .set({
+                category: classification.category,
+                updatedAt: new Date(),
+              })
+              .where(eq(memos.id, updatedMemo.id));
+
+            console.log(
+              `[AUTO-RECLASSIFY] Memo ${updatedMemo.id} reclassified as: ${classification.category} (confidence: ${classification.confidence})`
+            );
+          } catch (updateError) {
+            console.error(
+              `[AUTO-RECLASSIFY] Failed to update memo ${updatedMemo.id}:`,
+              updateError
+            );
+          }
+        })
+        .catch(classifyError => {
+          console.error(
+            `[AUTO-RECLASSIFY] Failed to classify memo ${updatedMemo.id}:`,
+            classifyError
+          );
+        });
+    }
+
+    return createSuccessResponse({
+      ...updatedMemo,
+      // 메타데이터 추가
+      hasSummary: !!updatedMemo.aiSummary,
+      summaryLength: updatedMemo.aiSummary ? updatedMemo.aiSummary.length : 0,
+      canSummarize:
+        !!updatedMemo.content && updatedMemo.content.trim().length > 0,
+      hasClassification: !!updatedMemo.category,
+      canClassify:
+        !!updatedMemo.content && updatedMemo.content.trim().length > 0,
+    });
   } catch (error) {
     console.error('메모 수정 오류:', error);
     return createBadRequestResponse('메모를 수정하는 중 오류가 발생했습니다.');

@@ -27,17 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Claude API로 메모 분류
-    const category = await classifyMemo(content);
-
-    // 카테고리 한국어 이름 매핑
-    const categoryNames = {
-      work: '업무',
-      personal: '개인',
-      study: '학습',
-      idea: '아이디어',
-      todo: '할일',
-      other: '기타',
-    };
+    const classification = await classifyMemo(content);
 
     const responseHeaders = new Headers({
       'X-Content-Type-Options': 'nosniff',
@@ -48,9 +38,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        category,
-        categoryName:
-          categoryNames[category as keyof typeof categoryNames] || '기타',
+        category: classification.category,
+        categoryKo: classification.categoryKo,
+        confidence: classification.confidence,
+        reasoning: classification.reasoning,
         contentLength: content.length,
       },
       { headers: responseHeaders }

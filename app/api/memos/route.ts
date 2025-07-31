@@ -12,6 +12,7 @@ import {
   paginationSchema,
   formatValidationErrors,
 } from '@/lib/validation/memo';
+import { classifyMemo } from '@/lib/anthropic';
 
 /**
  * GET /api/memos
@@ -111,7 +112,53 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
       .values(newMemoData)
       .returning();
 
-    return createSuccessResponse(createdMemo, 201);
+    // Context7 베스트 프랙티스: 자동 카테고리 분류 (비동기)
+    // 백그라운드에서 실행하여 응답 지연을 방지
+    if (createdMemo.content && createdMemo.content.trim().length > 0) {
+      // 자동 분류를 백그라운드에서 실행 (Promise 체인으로 에러 핸들링)
+      classifyMemo(createdMemo.content)
+        .then(async classification => {
+          try {
+            await db
+              .update(memos)
+              .set({
+                category: classification.category,
+                updatedAt: new Date(),
+              })
+              .where(eq(memos.id, createdMemo.id));
+
+            console.log(
+              `[AUTO-CLASSIFY] Memo ${createdMemo.id} classified as: ${classification.category} (confidence: ${classification.confidence})`
+            );
+          } catch (updateError) {
+            console.error(
+              `[AUTO-CLASSIFY] Failed to update memo ${createdMemo.id}:`,
+              updateError
+            );
+          }
+        })
+        .catch(classifyError => {
+          console.error(
+            `[AUTO-CLASSIFY] Failed to classify memo ${createdMemo.id}:`,
+            classifyError
+          );
+        });
+    }
+
+    return createSuccessResponse(
+      {
+        ...createdMemo,
+        // 메타데이터 추가
+        hasSummary: false,
+        summaryLength: 0,
+        canSummarize:
+          !!createdMemo.content && createdMemo.content.trim().length > 0,
+        hasClassification: false, // 백그라운드에서 처리되므로 초기값은 false
+        canClassify:
+          !!createdMemo.content && createdMemo.content.trim().length > 0,
+      },
+      201
+    );
   } catch (error) {
     console.error('메모 생성 오류:', error);
     return createBadRequestResponse('메모를 생성하는 중 오류가 발생했습니다.');

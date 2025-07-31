@@ -286,62 +286,167 @@ ${content}
 }
 
 /**
- * 메모를 카테고리별로 분류하는 함수
- * @param content - 분류할 메모 내용
- * @returns 분류된 카테고리
+ * 메모 분류 결과 타입 정의
  */
-export async function classifyMemo(content: string): Promise<string> {
+export interface MemoClassification {
+  category: string;
+  categoryKo: string;
+  confidence: number;
+  reasoning: string;
+}
+
+/**
+ * 카테고리 정의 및 매핑
+ */
+const MEMO_CATEGORIES = {
+  work: '업무',
+  personal: '개인',
+  study: '학습',
+  idea: '아이디어',
+  todo: '할일',
+  meeting: '회의',
+  finance: '재정',
+  health: '건강',
+  travel: '여행',
+  other: '기타',
+} as const;
+
+type MemoCategory = keyof typeof MEMO_CATEGORIES;
+
+/**
+ * Context7 베스트 프랙티스: 구조화된 출력을 위한 도구 정의
+ */
+const classificationTool = {
+  name: 'classify_memo_content',
+  description: '메모 내용을 분석하고 적절한 카테고리로 분류합니다.',
+  input_schema: {
+    type: 'object' as const,
+    properties: {
+      category: {
+        type: 'string' as const,
+        enum: Object.keys(MEMO_CATEGORIES),
+        description: '분류된 카테고리 (영어)',
+      },
+      confidence: {
+        type: 'number' as const,
+        minimum: 0,
+        maximum: 1,
+        description: '분류 신뢰도 (0.0-1.0)',
+      },
+      reasoning: {
+        type: 'string' as const,
+        description: '분류 근거에 대한 간단한 설명',
+      },
+    },
+    required: ['category', 'confidence', 'reasoning'],
+  },
+};
+
+/**
+ * 메모를 카테고리별로 분류하는 함수 (Context7 베스트 프랙티스 적용)
+ * @param content - 분류할 메모 내용
+ * @returns 분류된 카테고리 정보
+ */
+export async function classifyMemo(
+  content: string
+): Promise<MemoClassification> {
   try {
     if (!content || content.trim().length === 0) {
       throw new Error('Content cannot be empty');
     }
 
+    // 내용 길이 제한 (10,000자)
+    if (content.length > 10000) {
+      throw new Error('Content too long for classification');
+    }
+
+    // Context7 베스트 프랙티스: 구조화된 프롬프트와 도구 사용
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 512,
+      max_tokens: 1024,
+      tools: [classificationTool],
+      tool_choice: { type: 'tool', name: 'classify_memo_content' },
       messages: [
         {
           role: 'user',
-          content: `다음 메모를 적절한 카테고리로 분류해주세요. 다음 카테고리 중 하나를 선택해주세요:
-- 업무 (work)
-- 개인 (personal)  
-- 학습 (study)
-- 아이디어 (idea)
-- 할일 (todo)
-- 기타 (other)
+          content: `당신은 메모 내용 분석 전문가입니다. 주어진 메모를 가장 적합한 카테고리로 분류하는 것이 목표입니다.
 
-메모 내용:
+다음 메모 내용을 분석하고 분류해주세요:
+
+<memo_content>
 ${content}
+</memo_content>
 
-응답은 카테고리 이름만 영어로 답해주세요 (예: work, personal, study, idea, todo, other).`,
+<categories>
+사용 가능한 카테고리와 설명:
+- work (업무): 직장, 프로젝트, 업무 관련 내용
+- personal (개인): 개인적인 일상, 생각, 경험
+- study (학습): 공부, 연구, 교육 관련 내용
+- idea (아이디어): 창의적 아이디어, 발상, 영감
+- todo (할일): 해야 할 일, 계획, 일정
+- meeting (회의): 회의 내용, 논의 사항, 결정 사항
+- finance (재정): 금융, 예산, 투자, 지출 관련
+- health (건강): 건강, 운동, 의료 관련 내용
+- travel (여행): 여행 계획, 기록, 경험
+- other (기타): 위 카테고리에 속하지 않는 내용
+</categories>
+
+<instructions>
+분류 규칙:
+1. 메모의 주요 내용과 목적을 파악하세요
+2. 가장 관련성이 높은 단일 카테고리를 선택하세요
+3. 신뢰도는 분류의 확실성을 반영하세요 (0.7 이상 권장)
+4. 애매한 경우 'other' 카테고리를 사용하세요
+5. 근거는 간단명료하게 한국어로 작성하세요
+</instructions>
+
+<thinking>
+메모의 핵심 키워드와 맥락을 분석하여 가장 적합한 카테고리를 결정하겠습니다.
+</thinking>
+
+classify_memo_content 도구를 사용하여 분류 결과를 제공해주세요.`,
         },
       ],
     });
 
-    const classification = message.content[0];
-    if (classification.type === 'text') {
-      const category = classification.text.trim().toLowerCase();
-      const validCategories = [
-        'work',
-        'personal',
-        'study',
-        'idea',
-        'todo',
-        'other',
-      ];
+    // 도구 사용 응답 파싱
+    const toolUse = message.content.find(
+      block =>
+        block.type === 'tool_use' && block.name === 'classify_memo_content'
+    );
 
-      if (validCategories.includes(category)) {
-        return category;
-      }
-
-      // 기본 카테고리로 fallback
-      return 'other';
+    if (!toolUse || toolUse.type !== 'tool_use') {
+      throw new Error('No valid classification result from Claude API');
     }
 
-    throw new Error('Unexpected response format from Claude API');
+    const result = toolUse.input as {
+      category: string;
+      confidence: number;
+      reasoning: string;
+    };
+
+    // 유효성 검증
+    if (!Object.keys(MEMO_CATEGORIES).includes(result.category)) {
+      console.warn(
+        `Invalid category received: ${result.category}, defaulting to 'other'`
+      );
+      result.category = 'other';
+    }
+
+    // 신뢰도 범위 검증
+    if (result.confidence < 0 || result.confidence > 1) {
+      result.confidence = Math.max(0, Math.min(1, result.confidence));
+    }
+
+    return {
+      category: result.category,
+      categoryKo: MEMO_CATEGORIES[result.category as MemoCategory],
+      confidence: result.confidence,
+      reasoning: result.reasoning,
+    };
   } catch (error) {
     if (error instanceof Anthropic.APIError) {
-      console.error('Claude API Error:', {
+      console.error('Claude API Error during classification:', {
         status: error.status,
         name: error.name,
         message: error.message,

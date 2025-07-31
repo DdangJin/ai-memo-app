@@ -60,23 +60,33 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
 
-  // 동적 CSP 헤더 설정 (nonce 기반)
+  // 개발 환경에서는 유연한 CSP 설정 (Context7 개발모드)
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
   const cspHeader = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
-    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline'`,
-    "img-src 'self' data: https:",
-    "font-src 'self'",
-    "connect-src 'self'",
+    isDevelopment
+      ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'"
+      : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    isDevelopment
+      ? "style-src 'self' 'unsafe-inline'"
+      : `style-src 'self' 'nonce-${nonce}' 'unsafe-inline'`,
+    "img-src 'self' data: https: blob:",
+    "font-src 'self' data:",
+    isDevelopment
+      ? "connect-src 'self' ws: wss: http: https:"
+      : "connect-src 'self'",
     "media-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    'upgrade-insecure-requests',
   ].join('; ');
 
-  supabaseResponse.headers.set('Content-Security-Policy', cspHeader);
+  // 개발 환경에서는 CSP를 적용하지 않거나 더 느슨하게 적용
+  if (!isDevelopment) {
+    supabaseResponse.headers.set('Content-Security-Policy', cspHeader);
+  }
   supabaseResponse.headers.set('x-nonce', nonce);
 
   // 추가 보안 헤더 (API 보호)
