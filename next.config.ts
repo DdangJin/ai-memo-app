@@ -74,11 +74,6 @@ const nextConfig: NextConfig = {
             key: 'Permissions-Policy',
             value: 'microphone=*',
           },
-          // Context7 베스트 프랙티스: 레거시 브라우저 지원을 위한 Feature-Policy
-          {
-            key: 'Feature-Policy',
-            value: 'microphone *',
-          },
         ],
       },
     ];
