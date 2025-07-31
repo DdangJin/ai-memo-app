@@ -163,32 +163,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
     setIsActiveInstance(false);
   };
 
-  // Context7 베스트 프랙티스: 로딩 상태 (Hydration 에러 방지)
-  if (!isAvailable && !isMicrophoneAvailable) {
-    return (
-      <div
-        className={cn(
-          'p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl shadow-sm',
-          className
-        )}
-      >
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 border-3 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>
-          <div>
-            <h3 className="text-lg font-semibold text-blue-900 mb-1">
-              🎤 음성 인식 시스템 준비 중
-            </h3>
-            <p className="text-blue-700">
-              브라우저 호환성 및 마이크 권한을 확인하고 있습니다...
-            </p>
-            <div className="mt-2 text-sm text-blue-600">
-              <span className="animate-pulse">▪</span> Web Speech API 지원 확인
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Context7 베스트 프랙티스: 디버깅을 위해 로딩 조건 임시 제거
 
   // Context7 베스트 프랙티스: 브라우저 미지원 시 폴백
   if (isAvailable === false) {
