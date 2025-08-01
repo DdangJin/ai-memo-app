@@ -53,13 +53,26 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
   const [hasUserInteraction, setHasUserInteraction] = useState(false);
   const [showPermissionPrompt, setShowPermissionPrompt] = useState(false);
 
-  // Context7: 현재 활성 인스턴스에서만 transcript 처리
+  // Context7: 현재 활성 인스턴스에서만 transcript 처리 (디버깅 강화)
   useEffect(() => {
+    console.log('Context7 DEBUG - Transcript useEffect:', {
+      isListening,
+      isActiveInstance,
+      globalTranscript,
+      localTranscript,
+      hasCallback: !!onTranscriptChange
+    });
+    
     if (isListening && isActiveInstance) {
       // 현재 음성 인식 중이고 이 인스턴스가 활성화된 경우에만 처리
       if (globalTranscript !== localTranscript) {
+        console.log('Context7 DEBUG - Transcript 업데이트:', {
+          old: localTranscript,
+          new: globalTranscript
+        });
         setLocalTranscript(globalTranscript);
         if (onTranscriptChange) {
+          console.log('Context7 DEBUG - onTranscriptChange 호출:', globalTranscript);
           onTranscriptChange(globalTranscript);
         }
       }
@@ -73,14 +86,27 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
   ]);
 
   useEffect(() => {
+    console.log('Context7 DEBUG - FinalTranscript useEffect:', {
+      isListening,
+      isActiveInstance,
+      globalFinalTranscript,
+      localFinalTranscript,
+      hasCallback: !!onFinalTranscript
+    });
+    
     if (
       isListening &&
       isActiveInstance &&
       globalFinalTranscript !== localFinalTranscript
     ) {
       // 최종 transcript가 변경되고 이 인스턴스가 활성화된 경우에만 처리
+      console.log('Context7 DEBUG - FinalTranscript 업데이트:', {
+        old: localFinalTranscript,
+        new: globalFinalTranscript
+      });
       setLocalFinalTranscript(globalFinalTranscript);
       if (onFinalTranscript && globalFinalTranscript) {
+        console.log('Context7 DEBUG - onFinalTranscript 호출:', globalFinalTranscript);
         onFinalTranscript(globalFinalTranscript);
         // 최종 transcript 처리 후 로컬 상태 초기화
         setLocalTranscript('');
@@ -163,49 +189,22 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
     setIsActiveInstance(false);
   };
 
-  // Context7 베스트 프랙티스: 디버깅을 위해 로딩 조건 임시 제거
+  // Context7 베스트 프랙티스: 디버깅을 위해 모든 조건부 렌더링 임시 제거
+  console.log('Context7 DEBUG - VoiceInput 상태:', {
+    isAvailable,
+    permissionStatus,
+    showPermissionPrompt,
+    error,
+    isListening,
+    isActiveInstance
+  });
 
-  // Context7 베스트 프랙티스: 브라우저 미지원 시 폴백
-  if (isAvailable === false) {
-    return (
-      <div
-        className={cn(
-          'p-4 bg-yellow-50 border border-yellow-200 rounded-lg',
-          className
-        )}
-      >
-        <div className="flex items-center space-x-2">
-          <svg
-            className="w-5 h-5 text-yellow-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.232 18.5c-.77.833.192 2.5 1.732 2.5z"
-            />
-          </svg>
-          <div>
-            <h3 className="text-sm font-medium text-yellow-800">
-              음성 인식 미지원
-            </h3>
-            <p className="text-sm text-yellow-700">
-              이 브라우저는 음성 인식을 지원하지 않습니다. Chrome 또는 Edge를
-              사용해주세요.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // 모든 조건부 렌더링을 우회하고 메인 UI 강제 표시
+  // if (isAvailable === false) { ... } - 주석 처리
+  // if (isAvailable && permissionStatus === 'prompt' && showPermissionPrompt) { - 주석 처리
 
-  // Context7 베스트 프랙티스: denied 상태에서도 메인 UI 표시 (권한 거부 시에도 버튼 접근 가능)
-
-  // Context7 베스트 프랙티스: Google Meet 스타일 Pre-prompt (2024 최신 표준)
-  if (isAvailable && permissionStatus === 'prompt' && showPermissionPrompt) {
+  // Context7 베스트 프랙티스: 메인 UI 강제 표시 (디버깅용)
+  if (false) { // 조건을 false로 설정하여 권한 프롬프트 우회
     return (
       <div
         className={cn(
@@ -299,7 +298,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
         </div>
       </div>
     );
-  }
+  } // 권한 프롬프트 섹션 종료 (디버깅용으로 비활성화됨)
 
   return (
     <div className={cn('max-w-2xl mx-auto space-y-6', className)}>
