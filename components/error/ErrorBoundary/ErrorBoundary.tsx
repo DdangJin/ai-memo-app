@@ -8,16 +8,16 @@ import {
 interface ErrorBoundaryState {
   hasError: boolean;
   error: AIError | null;
-  errorInfo: any;
+  errorInfo: React.ErrorInfo | null;
 }
 
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: React.ComponentType<{ error: AIError; retry: () => void }>;
-  onError?: (error: AIError, errorInfo: any) => void;
+  onError?: (error: AIError, errorInfo: React.ErrorInfo) => void;
 }
 
-// Context7 패턴: AI 애플리케이션을 위한 에러 바운더리
+// AI 애플리케이션을 위한 에러 바운더리
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
@@ -39,7 +39,7 @@ export class ErrorBoundary extends Component<
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     const aiError = ErrorHandler.classifyError(error, 'react-error-boundary');
     const fullErrorInfo = createErrorInfo(error, errorInfo);
 
@@ -82,7 +82,7 @@ export class ErrorBoundary extends Component<
   }
 }
 
-// Context7 패턴: 기본 에러 폴백 컴포넌트
+// 기본 에러 폴백 컴포넌트
 interface DefaultErrorFallbackProps {
   error: AIError;
   retry: () => void;
@@ -169,7 +169,7 @@ const DefaultErrorFallback: React.FC<DefaultErrorFallbackProps> = ({
   );
 };
 
-// Context7 패턴: 특정 영역을 위한 미니 에러 바운더리
+// 특정 영역을 위한 미니 에러 바운더리
 export const MinimalErrorBoundary: React.FC<{
   children: ReactNode;
   fallback?: (error: AIError, retry: () => void) => ReactNode;

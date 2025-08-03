@@ -17,7 +17,7 @@
 }
 
 html {
-  /* Context7 권장: 스크롤 동작 명시적 설정 */
+  /* 스크롤 동작 명시적 설정 */
   scroll-behavior: smooth;
 }
 
@@ -50,7 +50,7 @@ body {
   background: linear-gradient(45deg, #4f46e5, #7c3aed);
 }
 
-/* Context7 AI 처리 애니메이션 */
+/* AI 처리 애니메이션 */
 @keyframes progress-indeterminate {
   0% {
     transform: translateX(-100%);

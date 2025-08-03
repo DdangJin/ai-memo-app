@@ -4,7 +4,7 @@ import { AIActionButton, AIStatusIndicator, AIToast } from '@/components/ai';
 import { SkeletonLoader, ProgressBar } from '@/components/ui';
 import { MemoCard, MemoListSkeleton } from '@/components/memo';
 
-// Context7 패턴: AI 처리 시스템 데모 및 테스트 컴포넌트
+// AI 처리 시스템 데모 및 테스트 컴포넌트
 export const AIProcessingDemo: React.FC = () => {
   const [testContent, setTestContent] = useState(
     '이것은 테스트용 메모입니다. AI 처리를 테스트해보겠습니다.'

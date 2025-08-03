@@ -162,10 +162,10 @@ export default function Navigation({
         return;
       }
 
-      if (hasChildren) {
+      if (hasChildren && showDropdown) {
         e.preventDefault();
         toggleDropdown(item.id);
-      } else {
+      } else if (!hasChildren) {
         onItemClick?.(item);
         onMobileMenuClose?.();
       }
@@ -190,7 +190,7 @@ export default function Navigation({
           {item.icon && <span className="flex-shrink-0">{item.icon}</span>}
           <span>{item.label}</span>
         </span>
-        {hasChildren && (
+        {hasChildren && showDropdown && (
           <svg
             className={cn(
               'ml-2 h-4 w-4 transition-transform',
@@ -244,7 +244,7 @@ export default function Navigation({
         )}
 
         {/* 하위 메뉴 */}
-        {hasChildren && isDropdownOpen && item.children && (
+        {hasChildren && showDropdown && isDropdownOpen && item.children && (
           <ul
             role="menu"
             aria-orientation="vertical"

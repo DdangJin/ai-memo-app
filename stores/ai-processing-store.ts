@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 
-// AI 처리 상태 타입 정의 (Context7 권장 타입 안전성)
+// AI 처리 상태 타입 정의 (타입 안전성)
 export type AIProcessingState = 'idle' | 'loading' | 'success' | 'error';
 
 export interface AIOperation {
@@ -20,7 +20,7 @@ export interface AIProcessingStoreState {
   isGlobalLoading: boolean;
   // 마지막 에러 메시지
   lastError: string | null;
-  // 성공 메시지 (Context7 UX 베스트 프랙티스)
+  // 성공 메시지 (UX 최적화)
   successMessage: string | null;
 }
 
@@ -49,7 +49,7 @@ export interface AIProcessingStoreActions {
   reset: () => void;
 }
 
-// Context7 패턴: combine 미들웨어를 사용한 깔끔한 상태 정의
+// combine 미들웨어를 사용한 깔끔한 상태 정의
 export const useAIProcessingStore = create(
   combine(
     {
@@ -210,12 +210,12 @@ export const useAIProcessingStore = create(
   )
 );
 
-// Context7 패턴: 타입 추출을 위한 유틸리티
+// 타입 추출을 위한 유틸리티
 export type AIProcessingStore = ReturnType<
   typeof useAIProcessingStore.getState
 >;
 
-// Context7 패턴: 개발자 도구 지원 (개발 환경에서만)
+// 개발자 도구 지원 (개발 환경에서만)
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
   // @ts-ignore
   window.aiProcessingStore = useAIProcessingStore;

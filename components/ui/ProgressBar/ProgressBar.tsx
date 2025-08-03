@@ -12,7 +12,7 @@ export interface ProgressBarProps {
   className?: string;
 }
 
-// Context7 UX 패턴: 작업 진행률을 표시하는 프로그레스 바
+// 작업 진행률을 표시하는 프로그레스 바
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value = 0,
   max = 100,

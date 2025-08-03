@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  // CSP nonce 생성 (Context7 베스트 프랙티스)
+  // CSP nonce 생성 (보안 베스트 프랙티스)
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
   let supabaseResponse = NextResponse.next({
@@ -56,11 +56,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // 추가 보안 헤더 적용 (Context7 OWASP 권장사항)
+  // 추가 보안 헤더 적용 (OWASP 권장사항)
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
 
-  // 개발 환경에서는 유연한 CSP 설정 (Context7 개발모드)
+  // 개발 환경에서는 유연한 CSP 설정 (개발모드)
   const isDevelopment = process.env.NODE_ENV === 'development';
 
   const cspHeader = [

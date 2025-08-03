@@ -19,7 +19,7 @@ export interface AIActionButtonProps
   fullWidth?: boolean;
 }
 
-// Context7 UX 패턴: AI 작업 상태를 반영하는 버튼 컴포넌트
+// AI 작업 상태를 반영하는 버튼 컴포넌트
 export const AIActionButton = forwardRef<
   HTMLButtonElement,
   AIActionButtonProps
@@ -52,10 +52,10 @@ export const AIActionButton = forwardRef<
       isLoading = isGlobalLoading;
     }
 
-    // Context7 UX: 로딩 중이거나 disabled일 때 버튼 비활성화
+    // 로딩 중이거나 disabled일 때 버튼 비활성화
     const isDisabled = disabled || isLoading;
 
-    // 버튼 스타일 정의 (Context7 디자인 시스템)
+    // 버튼 스타일 정의
     const baseClasses =
       'inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
 

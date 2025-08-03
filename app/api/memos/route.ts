@@ -21,7 +21,7 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
   try {
     const { searchParams } = new URL(req.url);
 
-    // Context7 베스트 프랙티스: 상세한 디버깅 로그
+    // 상세한 디버깅 로그
     console.log('DEBUG: API 요청 URL:', req.url);
     console.log('DEBUG: searchParams toString:', searchParams.toString());
     console.log('DEBUG: page param:', searchParams.get('page'));
@@ -85,7 +85,7 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
       },
     });
   } catch (error) {
-    // Context7 베스트 프랙티스: 상세한 에러 로깅
+    // 상세한 에러 로깅
     console.error('DEBUG: GET /api/memos caught error:', error);
     if (error instanceof Error) {
       console.error('DEBUG: Error message:', error.message);
@@ -131,7 +131,7 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
       .values(newMemoData)
       .returning();
 
-    // Context7 베스트 프랙티스: 자동 카테고리 분류 (비동기)
+    // 자동 카테고리 분류 (비동기)
     // 백그라운드에서 실행하여 응답 지연을 방지
     if (createdMemo.content && createdMemo.content.trim().length > 0) {
       // 자동 분류를 백그라운드에서 실행 (Promise 체인으로 에러 핸들링)
@@ -176,7 +176,7 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
         canClassify:
           !!createdMemo.content && createdMemo.content.trim().length > 0,
       },
-      201
+      { status: 201 }
     );
   } catch (error) {
     console.error('메모 생성 오류:', error);

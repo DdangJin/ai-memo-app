@@ -110,21 +110,16 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         'X-RateLimit-Remaining': '19',
       });
 
-      return new Response(
-        JSON.stringify({
-          success: true,
+      return createSuccessResponse(
+        {
           summary,
           memoId: id,
           originalLength: memo.content.length,
           summaryLength: summary.length,
           updatedAt: updatedMemo.updatedAt,
-        }),
+        },
         {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            ...Object.fromEntries(responseHeaders.entries()),
-          },
+          additionalHeaders: Object.fromEntries(responseHeaders.entries()),
         }
       );
     } catch (claudeError) {
@@ -197,9 +192,8 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       'X-RateLimit-Remaining': '99',
     });
 
-    return new Response(
-      JSON.stringify({
-        success: true,
+    return createSuccessResponse(
+      {
         memoId: id,
         title: memo.title,
         summary: memo.aiSummary,
@@ -207,13 +201,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
         originalLength: memo.content ? memo.content.length : 0,
         summaryLength: memo.aiSummary ? memo.aiSummary.length : 0,
         lastUpdated: memo.updatedAt,
-      }),
+      },
       {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          ...Object.fromEntries(responseHeaders.entries()),
-        },
+        additionalHeaders: Object.fromEntries(responseHeaders.entries()),
       }
     );
   } catch (error) {

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import ClientLayout from '@/app/client-layout';
+// regenerator-runtime for speech recognition
+import 'regenerator-runtime/runtime';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -19,10 +21,10 @@ export const metadata: Metadata = {
   description: 'AI 기술을 활용한 스마트 메모 애플리케이션',
   // PWA 매니페스트 연결
   manifest: '/manifest.json',
-  // 보안 메타데이터 (Context7 권장사항)
+  // 보안 메타데이터
   referrer: 'strict-origin-when-cross-origin',
   robots: 'index, follow',
-  // Context7 PWA 및 보안 메타태그 최적화
+  // PWA 및 보안 메타태그 최적화
   other: {
     'format-detection': 'telephone=no',
     'msapplication-TileColor': '#2563eb',
@@ -41,13 +43,23 @@ export default function RootLayout({
   return (
     <html lang="ko" data-scroll-behavior="smooth">
       <head>
-        {/* 추가 보안 메타 태그 (Context7 OWASP 베스트 프랙티스) */}
+        {/* Permissions Policy 헤더 설정 (마이크 권한 허용) */}
+        <meta
+          httpEquiv="Permissions-Policy"
+          content="microphone=*, camera=*, geolocation=*"
+        />
+        <meta
+          httpEquiv="Feature-Policy"
+          content="microphone *; camera *; geolocation *"
+        />
+
+        {/* 추가 보안 메타 태그 (OWASP 베스트 프랙티스) */}
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
         {/* 모바일 웹 앱 설정 - 최신 표준 사용 */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        {/* PWA Manifest 연결 (Context7 PWA 표준) */}
+        {/* PWA Manifest 연결 (PWA 표준) */}
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body

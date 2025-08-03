@@ -10,7 +10,7 @@ export interface AIErrorAlertProps {
   compact?: boolean;
 }
 
-// Context7 UX 패턴: AI 에러를 위한 전용 알림 컴포넌트
+// AI 에러를 위한 전용 알림 컴포넌트
 export const AIErrorAlert: React.FC<AIErrorAlertProps> = ({
   error,
   onRetry,

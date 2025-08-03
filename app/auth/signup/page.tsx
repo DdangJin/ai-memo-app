@@ -36,6 +36,11 @@ export default function SignUpPage() {
     try {
       await signUp({ email, password, fullName });
       setSuccess(true);
+
+      // 회원가입 성공 후 3초 뒤 로그인 페이지로 자동 이동
+      setTimeout(() => {
+        router.push('/auth/login');
+      }, 3000);
     } catch (error) {
       setError(
         error instanceof Error ? error.message : '회원가입에 실패했습니다.'
@@ -95,8 +100,11 @@ export default function SignUpPage() {
               <h2 className="text-xl font-bold text-green-800 dark:text-green-300 mb-2">
                 가입 완료!
               </h2>
-              <p className="text-green-600 dark:text-green-400">
+              <p className="text-green-600 dark:text-green-400 mb-2">
                 이메일을 확인하여 계정을 활성화해주세요.
+              </p>
+              <p className="text-sm text-green-500 dark:text-green-400">
+                3초 후 로그인 페이지로 자동 이동됩니다.
               </p>
             </div>
 

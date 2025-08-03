@@ -7,7 +7,7 @@ export interface MemoListSkeletonProps {
   className?: string;
 }
 
-// Context7 UX 패턴: 메모 리스트 로딩을 위한 스켈레톤 컴포넌트
+// 메모 리스트 로딩을 위한 스켈레톤 컴포넌트
 export const MemoListSkeleton: React.FC<MemoListSkeletonProps> = ({
   count = 3,
   className,

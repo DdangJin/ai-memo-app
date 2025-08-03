@@ -209,7 +209,10 @@ export default function MemosPage() {
 
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(`메모를 불러오는데 실패했습니다: ${response.status}`);
+          console.error('메모 로딩 에러 응답:', errorText);
+          throw new Error(
+            `메모를 불러오는데 실패했습니다: ${response.status} - ${errorText}`
+          );
         }
 
         const apiResponse: ApiResponse<MemoListResponse> =

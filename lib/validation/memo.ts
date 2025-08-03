@@ -52,7 +52,7 @@ export const uuidParamSchema = z.object({
 
 /**
  * 페이지네이션 쿼리 매개변수 검증 스키마
- * Context7 베스트 프랙티스: robust input validation with preprocess
+ * robust input validation with preprocess
  */
 export const paginationSchema = z.object({
   page: z.preprocess(

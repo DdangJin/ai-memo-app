@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   // X-Powered-By 헤더 비활성화 (보안 정보 노출 방지)
   poweredByHeader: false,
 
-  // 보안 헤더 설정 (Context7 OWASP 베스트 프랙티스)
+  // 보안 헤더 설정
   async headers() {
     const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -69,7 +69,7 @@ const nextConfig: NextConfig = {
             key: 'X-DNS-Prefetch-Control',
             value: 'off',
           },
-          // Context7 베스트 프랙티스: 마이크 권한 허용 (음성 인식 기능을 위해)
+          // 마이크 권한 허용 (음성 인식 기능을 위해)
           {
             key: 'Permissions-Policy',
             value: 'microphone=*',

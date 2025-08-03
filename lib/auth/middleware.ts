@@ -92,6 +92,19 @@ export function createNotFoundResponse(
 /**
  * 성공 응답 생성
  */
-export function createSuccessResponse<T>(data: T, status: number = 200) {
-  return NextResponse.json({ data, success: true }, { status });
+export function createSuccessResponse<T>(
+  data: T,
+  options: { status?: number; additionalHeaders?: Record<string, string> } = {}
+) {
+  const { status = 200, additionalHeaders = {} } = options;
+  return NextResponse.json(
+    { data, success: true },
+    {
+      status,
+      headers: {
+        'Content-Type': 'application/json',
+        ...additionalHeaders,
+      },
+    }
+  );
 }

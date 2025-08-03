@@ -16,7 +16,7 @@ export async function POST(
       return NextResponse.json({ error: 'Invalid memo ID' }, { status: 400 });
     }
 
-    // Context7 베스트 프랙티스: 사용자 인증 확인
+    // 사용자 인증 확인
     const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -94,7 +94,7 @@ export async function POST(
       })
       .where(eq(memos.id, memoId));
 
-    // Context7 보안 헤더 적용
+    // 보안 헤더 적용
     const responseHeaders = new Headers({
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'DENY',
@@ -119,7 +119,7 @@ export async function POST(
   } catch (error) {
     console.error('Classification error:', error);
 
-    // Context7 에러 처리: 상세 에러 정보 숨김
+    // 에러 처리: 상세 에러 정보 숨김
     const responseHeaders = new Headers({
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'DENY',

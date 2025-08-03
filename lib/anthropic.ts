@@ -235,7 +235,7 @@ async function summarizeSingleChunk(
   content: string,
   maxLength: number
 ): Promise<string> {
-  // Context7 베스트 프랙티스: 구조화된 프롬프트 사용
+  // 구조화된 프롬프트 사용
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 1024,
@@ -314,7 +314,7 @@ const MEMO_CATEGORIES = {
 type MemoCategory = keyof typeof MEMO_CATEGORIES;
 
 /**
- * Context7 베스트 프랙티스: 구조화된 출력을 위한 도구 정의
+ * 구조화된 출력을 위한 도구 정의
  */
 const classificationTool = {
   name: 'classify_memo_content',
@@ -343,7 +343,7 @@ const classificationTool = {
 };
 
 /**
- * 메모를 카테고리별로 분류하는 함수 (Context7 베스트 프랙티스 적용)
+ * 메모를 카테고리별로 분류하는 함수
  * @param content - 분류할 메모 내용
  * @returns 분류된 카테고리 정보
  */
@@ -360,7 +360,7 @@ export async function classifyMemo(
       throw new Error('Content too long for classification');
     }
 
-    // Context7 베스트 프랙티스: 구조화된 프롬프트와 도구 사용
+    // 구조화된 프롬프트와 도구 사용
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,

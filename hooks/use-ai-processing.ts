@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 import { useAIProcessingStore } from '@/stores/ai-processing-store';
 import { ErrorHandler, type AIError } from '@/utils/error-handling';
 
-// Context7 권장: AI 작업을 위한 유틸리티 함수들
+// AI 작업을 위한 유틸리티 함수들
 export const generateOperationId = (type: string, memoId?: string) => {
   const timestamp = Date.now();
   return memoId ? `${type}-${memoId}-${timestamp}` : `${type}-${timestamp}`;
 };
 
-// Context7 패턴: AI 처리를 위한 커스텀 훅
+// AI 처리를 위한 커스텀 훅
 export const useAIProcessing = () => {
   const {
     operations,
@@ -62,7 +62,7 @@ export const useAIProcessing = () => {
 
         return data.summary || null;
       } catch (error) {
-        // Context7 패턴: 구조화된 에러 처리
+        // 구조화된 에러 처리
         const aiError = ErrorHandler.classifyError(error, 'summarization');
 
         // 작업 실패
@@ -119,7 +119,7 @@ export const useAIProcessing = () => {
 
         return data.classification || null;
       } catch (error) {
-        // Context7 패턴: 구조화된 에러 처리
+        // 구조화된 에러 처리
         const aiError = ErrorHandler.classifyError(error, 'classification');
 
         // 작업 실패
@@ -180,7 +180,7 @@ export const useAIProcessing = () => {
 
         return data.response || null;
       } catch (error) {
-        // Context7 패턴: 구조화된 에러 처리
+        // 구조화된 에러 처리
         const aiError = ErrorHandler.classifyError(error, 'general-message');
 
         // 작업 실패
@@ -203,7 +203,7 @@ export const useAIProcessing = () => {
     [startOperation, completeOperation, failOperation]
   );
 
-  // Context7 패턴: 재시도 함수
+  // 재시도 함수
   const retryOperation = useCallback(
     async (operationId: string) => {
       const operation = operations[operationId];
@@ -231,7 +231,7 @@ export const useAIProcessing = () => {
     [operations]
   );
 
-  // Context7 패턴: 메모리 관리를 위한 정리 함수
+  // 메모리 관리를 위한 정리 함수
   const cleanup = useCallback(() => {
     cleanupCompletedOperations();
   }, [cleanupCompletedOperations]);
@@ -262,14 +262,14 @@ export const useAIProcessing = () => {
     reset,
     retryOperation,
 
-    // Context7 편의 함수들
+    // 편의 함수들
     isSummarizationLoading: isTypeLoading('summarization'),
     isClassificationLoading: isTypeLoading('classification'),
     isGeneralMessageLoading: isTypeLoading('general'),
   };
 };
 
-// Context7 패턴: 특정 메모를 위한 AI 처리 훅
+// 특정 메모를 위한 AI 처리 훅
 export const useMemoAIProcessing = (memoId: string) => {
   const aiProcessing = useAIProcessing();
 

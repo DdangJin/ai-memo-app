@@ -38,7 +38,7 @@ Anthropic SDK는 이미 설치되어 있습니다:
 
 ### 1. 메모 요약 (`/api/memos/[id]/summarize`)
 
-**메모 요약 생성 및 조회 엔드포인트**
+#### 메모 요약 생성 및 조회 엔드포인트
 
 **POST 요청 - 메모 요약 생성:**
 
@@ -541,7 +541,7 @@ export function MemoForm() {
 - 큰 메모: N개 청크 + 1회 통합 = (N+1)회 API 호출
 - 처리 시간: 청크 수에 비례하여 증가
 
-## 프론트엔드 보안 조치 (Context7 OWASP 베스트 프랙티스)
+## 프론트엔드 보안 조치 (OWASP 베스트 프랙티스)
 
 ### 구현된 보안 헤더
 
@@ -563,7 +563,7 @@ export function MemoForm() {
 
 ### CSP (Content Security Policy) 상세
 
-```
+```http
 Content-Security-Policy:
   default-src 'self';
   script-src 'self' 'nonce-{dynamic}' 'strict-dynamic';

@@ -11,7 +11,7 @@ export interface AIStatusIndicatorProps {
   className?: string;
 }
 
-// Context7 UX 패턴: AI 처리 상태 표시 컴포넌트
+// AI 처리 상태 표시 컴포넌트
 export const AIStatusIndicator: React.FC<AIStatusIndicatorProps> = ({
   operationId,
   type,
@@ -41,7 +41,7 @@ export const AIStatusIndicator: React.FC<AIStatusIndicatorProps> = ({
     status = isLoading ? 'loading' : 'idle';
   }
 
-  // 상태별 메시지 (Context7 UX 권장사항)
+  // 상태별 메시지 (UX 권장사항)
   const getStatusMessage = () => {
     if (isLoading) {
       if (type === 'summarization') return '요약 생성 중...';

@@ -8,7 +8,7 @@ export interface AIToastProps {
   className?: string;
 }
 
-// Context7 UX 패턴: AI 처리 결과를 사용자에게 알리는 토스트 컴포넌트
+// AI 처리 결과를 사용자에게 알리는 토스트 컴포넌트
 export const AIToast: React.FC<AIToastProps> = ({
   autoHide = true,
   autoHideDelay = 5000,

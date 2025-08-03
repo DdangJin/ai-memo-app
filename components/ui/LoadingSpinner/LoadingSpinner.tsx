@@ -7,7 +7,7 @@ export interface LoadingSpinnerProps {
   'aria-label'?: string;
 }
 
-// Context7 UX 패턴: 접근성을 고려한 로딩 스피너
+// 접근성을 고려한 로딩 스피너
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
   className,

@@ -9,7 +9,7 @@ export interface SkeletonLoaderProps {
   animated?: boolean;
 }
 
-// Context7 UX 패턴: 콘텐츠 로딩을 위한 스켈레톤 로더
+// 콘텐츠 로딩을 위한 스켈레톤 로더
 export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
   className,
   lines = 1,

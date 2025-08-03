@@ -1,4 +1,5 @@
-// Context7 에러 핸들링 유틸리티
+// 에러 핸들링 유틸리티
+import React from 'react';
 
 export enum ErrorType {
   NETWORK = 'NETWORK',
@@ -19,7 +20,7 @@ export interface AIError {
   operation?: string;
 }
 
-// Context7 패턴: 에러 분류 및 사용자 친화적 메시지 변환
+// 에러 분류 및 사용자 친화적 메시지 변환
 export class ErrorHandler {
   private static errorMessages: Record<ErrorType, string> = {
     [ErrorType.NETWORK]: '네트워크 연결을 확인해주세요.',
@@ -190,14 +191,14 @@ export class ErrorHandler {
     return sanitized;
   }
 
-  // Context7 패턴: 재시도 가능 여부 판단
+  // 재시도 가능 여부 판단
   static isRetryable(error: AIError): boolean {
     return [ErrorType.NETWORK, ErrorType.TIMEOUT, ErrorType.API].includes(
       error.type
     );
   }
 
-  // Context7 패턴: 에러 복구 제안
+  // 에러 복구 제안
   static getRecoveryAction(error: AIError): string | null {
     switch (error.type) {
       case ErrorType.NETWORK:
@@ -216,13 +217,12 @@ export class ErrorHandler {
   }
 }
 
-// Context7 패턴: 에러 바운더리를 위한 헬퍼
-export const createErrorInfo = (error: Error, errorInfo: any) => {
+// 에러 바운더리를 위한 헬퍼
+export const createErrorInfo = (
+  error: Error,
+  errorInfo: React.ErrorInfo
+): React.ErrorInfo => {
   return {
-    error: ErrorHandler.classifyError(error, 'react-boundary'),
-    errorInfo,
-    userAgent:
-      typeof window !== 'undefined' ? window.navigator.userAgent : 'server',
-    url: typeof window !== 'undefined' ? window.location.href : 'server',
+    componentStack: errorInfo.componentStack,
   };
 };

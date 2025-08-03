@@ -2,7 +2,7 @@
 
 ## 📁 Directory Structure
 
-```
+```text
 components/
 ├── ui/                 # 재사용 가능한 UI 컴포넌트
 │   ├── Header/        # 헤더 컴포넌트
@@ -70,7 +70,7 @@ enum ButtonVariant {
 
 각 컴포넌트 폴더는 다음과 같은 구조를 따릅니다:
 
-```
+```text
 ComponentName/
 ├── index.ts           # Barrel export
 ├── ComponentName.tsx  # 메인 컴포넌트

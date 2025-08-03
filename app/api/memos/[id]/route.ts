@@ -155,7 +155,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       .where(eq(memos.id, id))
       .returning();
 
-    // Context7 베스트 프랙티스: 내용이 변경된 경우 자동 재분류 (비동기)
+    // 내용이 변경된 경우 자동 재분류 (비동기)
     // 기존 내용과 다르고, 내용이 비어있지 않은 경우에만 실행
     if (
       content !== undefined &&
