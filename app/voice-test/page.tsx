@@ -1,19 +1,72 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VoiceInput } from '@/components/ui/VoiceInput';
 import { Button } from '@/components/ui/Button';
 
-// Context7 베스트 프랙티스: 음성 입력 테스트 페이지
+// 브라우저 localStorage 키 상수
+const STORAGE_KEYS = {
+  KO_TRANSCRIPTS: 'voice-test-ko-transcripts',
+  EN_TRANSCRIPTS: 'voice-test-en-transcripts',
+  CONTINUOUS_TRANSCRIPTS: 'voice-test-continuous-transcripts',
+} as const;
+
+// localStorage 헬퍼 함수들 (Context7 MCP 베스트 프랙티스)
+const loadFromStorage = (key: string): string[] => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.warn(`localStorage 읽기 실패 (${key}):`, error);
+    return [];
+  }
+};
+
+const saveToStorage = (key: string, data: string[]): void => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (error) {
+    console.warn(`localStorage 저장 실패 (${key}):`, error);
+  }
+};
+
+// 음성 입력 테스트 페이지
 export default function VoiceTestPage() {
-  // Context7: 각 VoiceInput에 독립적인 상태 관리
+  // 각 VoiceInput에 독립적인 상태 관리 (localStorage에서 초기화)
   const [koTranscripts, setKoTranscripts] = useState<string[]>([]);
   const [enTranscripts, setEnTranscripts] = useState<string[]>([]);
-  const [continuousTranscripts, setContinuousTranscripts] = useState<string[]>([]);
-  
+  const [continuousTranscripts, setContinuousTranscripts] = useState<string[]>(
+    []
+  );
+
   const [koCurrentTranscript, setKoCurrentTranscript] = useState('');
   const [enCurrentTranscript, setEnCurrentTranscript] = useState('');
-  const [continuousCurrentTranscript, setContinuousCurrentTranscript] = useState('');
+  const [continuousCurrentTranscript, setContinuousCurrentTranscript] =
+    useState('');
+
+  // localStorage에서 히스토리 로드 (Context7 MCP: 브라우저 새로고침 후 데이터 복원)
+  useEffect(() => {
+    setKoTranscripts(loadFromStorage(STORAGE_KEYS.KO_TRANSCRIPTS));
+    setEnTranscripts(loadFromStorage(STORAGE_KEYS.EN_TRANSCRIPTS));
+    setContinuousTranscripts(
+      loadFromStorage(STORAGE_KEYS.CONTINUOUS_TRANSCRIPTS)
+    );
+  }, []);
+
+  // 상태 변경 시 localStorage에 자동 저장 (Context7 MCP: 데이터 지속성)
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.KO_TRANSCRIPTS, koTranscripts);
+  }, [koTranscripts]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.EN_TRANSCRIPTS, enTranscripts);
+  }, [enTranscripts]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.CONTINUOUS_TRANSCRIPTS, continuousTranscripts);
+  }, [continuousTranscripts]);
 
   // 한국어 핸들러
   const handleKoTranscriptChange = (transcript: string) => {
@@ -51,20 +104,30 @@ export default function VoiceTestPage() {
     }
   };
 
-  // Context7: 모든 히스토리 초기화
+  // 모든 히스토리 초기화 (Context7 MCP: localStorage도 함께 정리)
   const clearHistory = () => {
+    // 상태 초기화
     setKoTranscripts([]);
     setEnTranscripts([]);
     setContinuousTranscripts([]);
     setKoCurrentTranscript('');
     setEnCurrentTranscript('');
     setContinuousCurrentTranscript('');
+
+    // localStorage 정리
+    try {
+      localStorage.removeItem(STORAGE_KEYS.KO_TRANSCRIPTS);
+      localStorage.removeItem(STORAGE_KEYS.EN_TRANSCRIPTS);
+      localStorage.removeItem(STORAGE_KEYS.CONTINUOUS_TRANSCRIPTS);
+    } catch (error) {
+      console.warn('localStorage 정리 실패:', error);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        {/* Context7 베스트 프랙티스: 헤더 */}
+        {/* 헤더 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             음성 인식 테스트
@@ -74,7 +137,7 @@ export default function VoiceTestPage() {
           </p>
         </div>
 
-        {/* Context7 베스트 프랙티스: 테스트 섹션 */}
+        {/* 테스트 섹션 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* 한국어 테스트 */}
           <div className="bg-white rounded-lg shadow-lg p-6">
@@ -128,7 +191,11 @@ export default function VoiceTestPage() {
                 onClick={clearHistory}
                 variant="outline"
                 size="sm"
-                disabled={koTranscripts.length === 0 && enTranscripts.length === 0 && continuousTranscripts.length === 0}
+                disabled={
+                  koTranscripts.length === 0 &&
+                  enTranscripts.length === 0 &&
+                  continuousTranscripts.length === 0
+                }
               >
                 초기화
               </Button>
@@ -138,20 +205,28 @@ export default function VoiceTestPage() {
               {/* 현재 진행 중인 트랜스크립트 */}
               {koCurrentTranscript && (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="text-xs text-blue-600 mb-1">한국어 진행 중...</div>
+                  <div className="text-xs text-blue-600 mb-1">
+                    한국어 진행 중...
+                  </div>
                   <div className="text-gray-900">{koCurrentTranscript}</div>
                 </div>
               )}
               {enCurrentTranscript && (
                 <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="text-xs text-green-600 mb-1">English in progress...</div>
+                  <div className="text-xs text-green-600 mb-1">
+                    English in progress...
+                  </div>
                   <div className="text-gray-900">{enCurrentTranscript}</div>
                 </div>
               )}
               {continuousCurrentTranscript && (
                 <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                  <div className="text-xs text-purple-600 mb-1">연속 모드 진행 중...</div>
-                  <div className="text-gray-900">{continuousCurrentTranscript}</div>
+                  <div className="text-xs text-purple-600 mb-1">
+                    연속 모드 진행 중...
+                  </div>
+                  <div className="text-gray-900">
+                    {continuousCurrentTranscript}
+                  </div>
                 </div>
               )}
 
@@ -160,7 +235,7 @@ export default function VoiceTestPage() {
                 const allTranscripts = [
                   ...koTranscripts,
                   ...enTranscripts,
-                  ...continuousTranscripts
+                  ...continuousTranscripts,
                 ];
                 return allTranscripts.length > 0 ? (
                   <div className="max-h-64 overflow-y-auto space-y-2">
@@ -200,7 +275,7 @@ export default function VoiceTestPage() {
           </div>
         </div>
 
-        {/* Context7 베스트 프랙티스: 사용법 안내 */}
+        {/* 사용법 안내 */}
         <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-blue-900 mb-3">
             📋 사용법 안내
@@ -228,7 +303,7 @@ export default function VoiceTestPage() {
           </div>
         </div>
 
-        {/* Context7 베스트 프랙티스: 브라우저 호환성 안내 */}
+        {/* 브라우저 호환성 안내 */}
         <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-yellow-900 mb-3">
             🌐 브라우저 호환성
