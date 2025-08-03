@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
 
-// Context7 베스트 프랙티스: 음성 입력 컴포넌트 props
+// 음성 입력 컴포넌트 props
 export interface VoiceInputProps {
   onTranscriptChange?: (transcript: string) => void;
   onFinalTranscript?: (transcript: string) => void;
@@ -46,88 +46,117 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
     permissionStatus,
   } = useSpeechRecognition();
 
-  // Context7: 각 VoiceInput 인스턴스별 독립 상태 관리
+  // 각 VoiceInput 인스턴스별 독립 상태 관리
   const [localTranscript, setLocalTranscript] = useState('');
   const [localFinalTranscript, setLocalFinalTranscript] = useState('');
   const [isActiveInstance, setIsActiveInstance] = useState(false);
   const [hasUserInteraction, setHasUserInteraction] = useState(false);
   const [showPermissionPrompt, setShowPermissionPrompt] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
+  // hydration mismatch 방지
+  const [isClient, setIsClient] = useState(false);
 
-  // Context7: 현재 활성 인스턴스에서만 transcript 처리 (디버깅 강화)
+  // 클라이언트 사이드 렌더링 확보 + 시간 상태 관리
+  const [currentTime, setCurrentTime] = useState('');
+
   useEffect(() => {
-    console.log('Context7 DEBUG - Transcript useEffect:', {
-      isListening,
-      isActiveInstance,
-      globalTranscript,
-      localTranscript,
-      hasCallback: !!onTranscriptChange
-    });
-    
-    if (isListening && isActiveInstance) {
-      // 현재 음성 인식 중이고 이 인스턴스가 활성화된 경우에만 처리
-      if (globalTranscript !== localTranscript) {
-        console.log('Context7 DEBUG - Transcript 업데이트:', {
-          old: localTranscript,
-          new: globalTranscript
-        });
-        setLocalTranscript(globalTranscript);
-        if (onTranscriptChange) {
-          console.log('Context7 DEBUG - onTranscriptChange 호출:', globalTranscript);
-          onTranscriptChange(globalTranscript);
-        }
+    setIsClient(true);
+    // 시간은 클라이언트에서만 설정
+    setCurrentTime(new Date().toLocaleTimeString('ko-KR'));
+
+    // 1초마다 시간 업데이트
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString('ko-KR'));
+    }, 1000);
+
+    return () => clearInterval(timeInterval);
+  }, []);
+
+  // 현재 활성 인스턴스에서만 transcript 처리 (Context7 MCP: 로컬 transcript 보호)
+  useEffect(() => {
+    // 음성 인식 중이고 활성 인스턴스일 때만 globalTranscript를 localTranscript에 반영
+    // 음성 인식이 끝난 후에는 localTranscript를 보호하여 사용자가 결과를 확인할 수 있도록 함
+    if (
+      isActiveInstance &&
+      isListening &&
+      globalTranscript !== localTranscript &&
+      globalTranscript.length > 0
+    ) {
+      setLocalTranscript(globalTranscript);
+      if (onTranscriptChange) {
+        onTranscriptChange(globalTranscript);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     globalTranscript,
     isListening,
     isActiveInstance,
     localTranscript,
-    onTranscriptChange,
+    // onTranscriptChange는 의도적으로 제외: 외부 props로 자주 변경되어 무한 리렌더링 방지
   ]);
 
   useEffect(() => {
-    console.log('Context7 DEBUG - FinalTranscript useEffect:', {
-      isListening,
-      isActiveInstance,
-      globalFinalTranscript,
-      localFinalTranscript,
-      hasCallback: !!onFinalTranscript
-    });
-    
-    if (
-      isListening &&
-      isActiveInstance &&
-      globalFinalTranscript !== localFinalTranscript
-    ) {
-      // 최종 transcript가 변경되고 이 인스턴스가 활성화된 경우에만 처리
-      console.log('Context7 DEBUG - FinalTranscript 업데이트:', {
-        old: localFinalTranscript,
-        new: globalFinalTranscript
-      });
+    // 활성 인스턴스에서 final transcript 처리 (isListening 조건 제거)
+    if (isActiveInstance && globalFinalTranscript !== localFinalTranscript) {
       setLocalFinalTranscript(globalFinalTranscript);
       if (onFinalTranscript && globalFinalTranscript) {
-        console.log('Context7 DEBUG - onFinalTranscript 호출:', globalFinalTranscript);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(
+            'DEBUG DEBUG - onFinalTranscript 호출:',
+            globalFinalTranscript
+          );
+        }
         onFinalTranscript(globalFinalTranscript);
-        // 최종 transcript 처리 후 로컬 상태 초기화
-        setLocalTranscript('');
+
+        // final transcript 처리 완료 - current transcript는 다음 인식 시작까지 유지
+        // (사용자가 결과를 확인할 수 있도록 바로 초기화하지 않음)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     globalFinalTranscript,
     isListening,
     isActiveInstance,
     localFinalTranscript,
-    onFinalTranscript,
+    // onFinalTranscript, onTranscriptChange는 의도적으로 제외: 외부 props로 자주 변경될 수 있음
   ]);
 
-  // Context7: 음성 인식 중지 시 활성 인스턴스 해제
+  // final transcript 처리 완료 후 인스턴스 해제
   useEffect(() => {
-    if (!isListening && isActiveInstance) {
-      setIsActiveInstance(false);
-    }
-  }, [isListening, isActiveInstance]);
+    // final transcript가 처리되고 음성 인식이 중지된 후에만 인스턴스 해제
+    if (
+      !isListening &&
+      isActiveInstance &&
+      globalFinalTranscript &&
+      localFinalTranscript === globalFinalTranscript
+    ) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('DEBUG - 인스턴스 해제:', {
+          isListening,
+          globalFinalTranscript,
+          localFinalTranscript,
+        });
+      }
+      // 자동 종료 시 글로벌 transcript만 초기화 (current transcript는 유지)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('DEBUG - 자동 종료 시 글로벌 transcript만 초기화');
+      }
+      resetGlobalTranscript(); // 글로벌 transcript만 초기화
 
-  // Context7 베스트 프랙티스: 자동 시작 (사용자 상호작용 후에만)
+      // final transcript 처리가 완료되었으므로 인스턴스 해제
+      setTimeout(() => setIsActiveInstance(false), 100); // 약간의 지연으로 안전하게 처리
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isListening,
+    isActiveInstance,
+    globalFinalTranscript,
+    localFinalTranscript,
+    // onTranscriptChange, resetGlobalTranscript는 의도적으로 제외: 안정된 함수 및 무한 리렌더링 방지
+  ]);
+
+  // 자동 시작 (사용자 상호작용 후에만)
   useEffect(() => {
     if (
       autoStart &&
@@ -149,7 +178,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
     startListening,
   ]);
 
-  // Context7 베스트 프랙티스: 권한 프롬프트 표시 타이밍
+  // 권한 프롬프트 표시 타이밍
   useEffect(() => {
     if (isAvailable && permissionStatus === 'prompt' && !showPermissionPrompt) {
       // 즉시 권한 요청 안내 표시
@@ -157,7 +186,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
     }
   }, [isAvailable, permissionStatus, showPermissionPrompt]);
 
-  // Context7 베스트 프랙티스: 음성 인식 토글
+  // 음성 인식 토글
   const handleToggleListening = async () => {
     setHasUserInteraction(true);
 
@@ -169,19 +198,33 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
         } else {
           await abortListening();
         }
-        setIsActiveInstance(false);
+        // final transcript 처리를 위해 인스턴스는 useEffect에서 해제
+        if (process.env.NODE_ENV === 'development') {
+          console.log('DEBUG - 음성 인식 중지, 인스턴스는 유지');
+        }
+
+        // 수동 중지 시 글로벌 transcript만 초기화 (current transcript는 다음 인식까지 유지)
+        setTimeout(() => {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('DEBUG - 수동 중지 시 글로벌 transcript만 초기화');
+          }
+          resetGlobalTranscript(); // 글로벌 transcript만 초기화
+        }, 100);
       }
     } else {
-      // 다른 모든 인스턴스 비활성화하고 이 인스턴스만 활성화
+      // 새로운 음성 인식 시작 - 이전 결과 초기화
       resetGlobalTranscript(); // 이전 transcript 초기화
       setIsActiveInstance(true);
-      setLocalTranscript('');
+      setLocalTranscript(''); // 새 인식 시작 시에만 current transcript 초기화
       setLocalFinalTranscript('');
+      if (onTranscriptChange) {
+        onTranscriptChange(''); // 새 인식 시작 시에만 UI 초기화
+      }
       await startListening({ continuous, language });
     }
   };
 
-  // Context7 베스트 프랙티스: 리셋 핸들러
+  // 리셋 핸들러
   const handleReset = () => {
     resetGlobalTranscript();
     setLocalTranscript('');
@@ -189,22 +232,34 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
     setIsActiveInstance(false);
   };
 
-  // Context7 베스트 프랙티스: 디버깅을 위해 모든 조건부 렌더링 임시 제거
-  console.log('Context7 DEBUG - VoiceInput 상태:', {
+  // 디버깅: 상태 변화시에만 디버그 로그 출력
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('DEBUG - VoiceInput 상태 변화:', {
+        isAvailable,
+        permissionStatus,
+        showPermissionPrompt,
+        error,
+        isListening,
+        isActiveInstance,
+      });
+    }
+  }, [
     isAvailable,
     permissionStatus,
     showPermissionPrompt,
     error,
     isListening,
-    isActiveInstance
-  });
+    isActiveInstance,
+  ]);
 
   // 모든 조건부 렌더링을 우회하고 메인 UI 강제 표시
   // if (isAvailable === false) { ... } - 주석 처리
   // if (isAvailable && permissionStatus === 'prompt' && showPermissionPrompt) { - 주석 처리
 
-  // Context7 베스트 프랙티스: 메인 UI 강제 표시 (디버깅용)
-  if (false) { // 조건을 false로 설정하여 권한 프롬프트 우회
+  // 메인 UI 강제 표시 (디버깅용)
+  if (false) {
+    // 조건을 false로 설정하여 권한 프롬프트 우회
     return (
       <div
         className={cn(
@@ -237,7 +292,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
             <Button
               onClick={async () => {
                 console.log(
-                  'Context7: User wants to use voice - requesting permission'
+                  'DEBUG: User wants to use voice - requesting permission'
                 );
                 try {
                   if (
@@ -248,15 +303,13 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
                       audio: true,
                     });
                     stream.getTracks().forEach(track => track.stop());
-                    console.log(
-                      'Context7: Voice permission granted successfully'
-                    );
+                    console.log('DEBUG: Voice permission granted successfully');
                     setShowPermissionPrompt(false);
                     // 부드러운 상태 전환을 위한 짧은 지연
                     setTimeout(() => window.location.reload(), 500);
                   }
                 } catch (error) {
-                  console.error('Context7: Voice permission denied:', error);
+                  console.error('DEBUG: Voice permission denied:', error);
                   alert(
                     '권한이 거부되었습니다. 브라우저 주소창의 🔒 아이콘을 클릭하여 마이크 권한을 허용해주세요.'
                   );
@@ -271,12 +324,14 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
             <Button
               onClick={() => {
                 console.log(
-                  'Context7: User does not want to use voice - proceeding without'
+                  'DEBUG: User does not want to use voice - proceeding without'
                 );
                 setShowPermissionPrompt(false);
-                setError(
+                setNotification(
                   '음성 인식 없이 계속 진행합니다. 나중에 필요하면 권한을 허용할 수 있습니다.'
                 );
+                // 알림은 5초 후 자동 제거
+                setTimeout(() => setNotification(null), 5000);
               }}
               variant="outline"
               className="w-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-4 px-6 rounded-xl transition-all duration-200"
@@ -302,7 +357,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
 
   return (
     <div className={cn('max-w-2xl mx-auto space-y-6', className)}>
-      {/* Context7 베스트 프랙티스: 2024 최신 음성 인식 UI */}
+      {/* 2024 최신 음성 인식 UI */}
       <div className="bg-white border-2 border-gray-200 rounded-2xl shadow-lg overflow-hidden">
         {/* 헤더 섹션 */}
         <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
@@ -392,14 +447,14 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
               )}
             </Button>
 
-            {/* Context7 베스트 프랙티스: 권한 상태별 스마트 버튼 */}
+            {/* 권한 상태별 스마트 버튼 */}
             {permissionStatus !== 'granted' && (
               <Button
                 onClick={async () => {
-                  // Context7: 2024 표준 - 안전한 클릭 이벤트 처리
+                  // 2024 표준 - 안전한 클릭 이벤트 처리
 
                   console.log(
-                    'Context7: 2024 Standard - User gesture detected for permission request'
+                    'DEBUG: 2024 Standard - User gesture detected for permission request'
                   );
 
                   try {
@@ -409,10 +464,10 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
                       navigator.mediaDevices.getUserMedia
                     ) {
                       console.log(
-                        'Context7: Starting getUserMedia with explicit user gesture...'
+                        'DEBUG: Starting getUserMedia with explicit user gesture...'
                       );
 
-                      // Context7: 즉시 사용자 제스처 컨텍스트에서 실행
+                      // 즉시 사용자 제스처 컨텍스트에서 실행
                       const stream = await navigator.mediaDevices.getUserMedia({
                         audio: true,
                         video: false, // 마이크만 요청
@@ -421,11 +476,11 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
                       // 즉시 스트림 정리 (권한 확인 목적)
                       stream.getTracks().forEach(track => {
                         track.stop();
-                        console.log('Context7: Track stopped:', track.kind);
+                        console.log('DEBUG: Track stopped:', track.kind);
                       });
 
                       console.log(
-                        'Context7: Permission granted successfully via user gesture'
+                        'DEBUG: Permission granted successfully via user gesture'
                       );
 
                       // 성공 피드백
@@ -439,10 +494,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
                       throw new Error('getUserMedia API가 지원되지 않습니다.');
                     }
                   } catch (error) {
-                    console.error(
-                      'Context7: Permission request failed:',
-                      error
-                    );
+                    console.error('DEBUG: Permission request failed:', error);
 
                     if (error instanceof DOMException) {
                       if (error.name === 'NotAllowedError') {
@@ -524,7 +576,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
           </div>
         </div>
 
-        {/* Context7 베스트 프랙티스: 현대적 트랜스크립트 영역 */}
+        {/* 현대적 트랜스크립트 영역 */}
         <div className="p-6 bg-white">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-gray-900 font-semibold">음성 인식 결과</h4>
@@ -578,31 +630,48 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
         </div>
       </div>
 
-      {/* Context7 베스트 프랙티스: 현대적 에러/알림 메시지 */}
+      {/* 에러 메시지 (실제 문제/실패) */}
       {error && (
-        <div className="bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-400 p-4 rounded-lg shadow-sm">
+        <div className="bg-gradient-to-r from-red-50 to-red-100 border-l-4 border-red-400 p-4 rounded-lg shadow-sm">
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                <span className="text-orange-600 text-lg">⚠️</span>
+              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                <span className="text-red-600 text-lg">❌</span>
               </div>
             </div>
             <div className="flex-1">
-              <h5 className="text-orange-800 font-medium mb-1">
-                음성 인식 알림
-              </h5>
-              <p className="text-orange-700 text-sm leading-relaxed">{error}</p>
+              <h5 className="text-red-800 font-medium mb-1">음성 인식 오류</h5>
+              <p className="text-red-700 text-sm leading-relaxed">{error}</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Context7 베스트 프랙티스: 시스템 상태 대시보드 */}
+      {/* 알림 메시지 (정보성 메시지) */}
+      {notification && (
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-400 p-4 rounded-lg shadow-sm">
+          <div className="flex items-start space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 text-lg">ℹ️</span>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h5 className="text-blue-800 font-medium mb-1">알림</h5>
+              <p className="text-blue-700 text-sm leading-relaxed">
+                {notification}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 시스템 상태 대시보드 */}
       <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
         <div className="flex items-center justify-between mb-3">
           <h5 className="text-gray-800 font-medium text-sm">시스템 상태</h5>
-          <div className="text-xs text-gray-500">
-            마지막 업데이트: {new Date().toLocaleTimeString('ko-KR')}
+          <div className="text-xs text-gray-500" suppressHydrationWarning>
+            마지막 업데이트: {!isClient ? 'Loading...' : currentTime}
           </div>
         </div>
 
@@ -652,16 +721,17 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
         <div className="mt-3 pt-3 border-t border-gray-200">
           <div className="flex items-center justify-between text-xs text-gray-500">
             <span>브라우저 엔진</span>
-            <span>
-              {typeof window !== 'undefined'
-                ? window.navigator.userAgent.includes('Chrome')
-                  ? 'Chromium'
-                  : window.navigator.userAgent.includes('Firefox')
-                    ? 'Gecko'
-                    : window.navigator.userAgent.includes('Safari')
-                      ? 'WebKit'
-                      : 'Unknown'
-                : 'Loading...'}
+            <span suppressHydrationWarning>
+              {/* hydration mismatch 방지 */}
+              {!isClient
+                ? 'Loading...'
+                : (() => {
+                    const userAgent = window.navigator.userAgent;
+                    if (userAgent.includes('Chrome')) return 'Chromium';
+                    if (userAgent.includes('Firefox')) return 'Gecko';
+                    if (userAgent.includes('Safari')) return 'WebKit';
+                    return 'Unknown';
+                  })()}
             </span>
           </div>
           <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
